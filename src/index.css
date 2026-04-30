@@ -1,1 +1,14 @@
 @import "tailwindcss";
+
+:root {
+  --masjid-green: #1a3d2b;
+  --masjid-green-mid: #224d37;
+  --masjid-green-light: #2d6a4f;
+  --masjid-cream: #f8f4ef;
+  --masjid-cream-dark: #f0e9e0;
+  --masjid-gold: #c9a84c;
+}
+
+body {
+  background-color: var(--masjid-cream);
+}

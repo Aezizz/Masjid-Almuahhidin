@@ -188,31 +188,47 @@ function Donasi() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div
+      className="min-h-screen"
+      style={{ backgroundColor: "var(--masjid-cream)" }}
+    >
       {/* Header */}
-      <div className="bg-green-800 pt-28 pb-16 px-4 text-center text-white">
-        <p className="text-green-300 text-xs font-semibold tracking-widest uppercase mb-3">
-          Masjid Al-Muahhidin
-        </p>
-        <h1 className="text-4xl font-bold mb-2">Donasi & Infaq</h1>
-        <p className="text-green-200 text-sm">
-          Salurkan donasi Anda untuk kemakmuran Masjid Al-Muahhidin
-        </p>
-
-        <div className="mt-8 inline-block bg-white/10 backdrop-blur border border-white/20 rounded-2xl px-10 py-5">
-          <p className="text-green-200 text-xs mb-1">Total Saldo Sedekah</p>
-          {loading ? (
-            <p className="text-2xl font-bold">Memuat...</p>
-          ) : (
-            <p className="text-3xl font-bold">{formatRupiah(totalSaldo)}</p>
-          )}
-          <p className="text-green-300 text-xs mt-1">
-            *Diperbarui secara berkala
+      <div
+        className="relative overflow-hidden pt-28 pb-16 px-4 text-center text-white"
+        style={{ backgroundColor: "var(--masjid-green)" }}
+      >
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='%23ffffff' stroke-width='0.5' opacity='0.15'%3E%3Cpath d='M40 0 L80 40 L40 80 L0 40 Z'/%3E%3Cpath d='M40 10 L70 40 L40 70 L10 40 Z'/%3E%3Ccircle cx='40' cy='40' r='15'/%3E%3Ccircle cx='40' cy='40' r='25'/%3E%3Cpath d='M40 0 L40 80 M0 40 L80 40'/%3E%3Cpath d='M15 15 L65 65 M65 15 L15 65'/%3E%3C/g%3E%3C/svg%3E")`,
+            backgroundSize: "80px 80px",
+          }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/30" />
+        <div className="relative">
+          <p className="style text-xs font-semibold tracking-widest uppercase mb-3">
+            Masjid Al-Muahhidin
           </p>
+          <h1 className="text-4xl font-bold mb-2">Donasi & Infaq</h1>
+          <p className="text-green-200 text-sm">
+            Salurkan donasi Anda untuk kemakmuran Masjid Al-Muahhidin
+          </p>
+
+          <div className="mt-8 inline-block bg-white/10 backdrop-blur border border-white/20 rounded-2xl px-10 py-5">
+            <p className="text-green-200 text-xs mb-1">Total Saldo Sedekah</p>
+            {loading ? (
+              <p className="text-2xl font-bold">Memuat...</p>
+            ) : (
+              <p className="text-3xl font-bold">{formatRupiah(totalSaldo)}</p>
+            )}
+            <p className="text-green-300 text-xs mt-1">
+              *Diperbarui secara berkala
+            </p>
+          </div>
         </div>
       </div>
 
-      <div className="max-w-3xl mx-auto px-4 -mt-6 pb-16">
+      <div className="max-w-3xl mx-auto px-4 -mt-6 pt-8 pb-16">
         {/* Tab */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-1.5 flex gap-1 mb-6">
           {[

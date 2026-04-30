@@ -1,3 +1,5 @@
+const arabesque = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='%23ffffff' stroke-width='0.5' opacity='0.15'%3E%3Cpath d='M40 0 L80 40 L40 80 L0 40 Z'/%3E%3Cpath d='M40 10 L70 40 L40 70 L10 40 Z'/%3E%3Ccircle cx='40' cy='40' r='15'/%3E%3Ccircle cx='40' cy='40' r='25'/%3E%3Cpath d='M40 0 L40 80 M0 40 L80 40'/%3E%3Cpath d='M15 15 L65 65 M65 15 L15 65'/%3E%3C/g%3E%3C/svg%3E")`;
+
 const kegiatanList = [
   {
     id: 1,
@@ -42,80 +44,116 @@ const kegiatanList = [
 ];
 
 const kategoriWarna = {
-  Kajian: "bg-blue-100 text-blue-700",
-  Pendidikan: "bg-yellow-100 text-yellow-700",
-  Ibadah: "bg-green-100 text-green-700",
+  Kajian: { bg: "rgba(201,168,76,0.15)", text: "#8a6d1e" },
+  Pendidikan: { bg: "rgba(59,130,246,0.1)", text: "#1d4ed8" },
+  Ibadah: { bg: "rgba(26,61,43,0.1)", text: "var(--masjid-green)" },
 };
 
 function Kegiatan() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div
+      className="min-h-screen"
+      style={{ backgroundColor: "var(--masjid-cream)" }}
+    >
       {/* Header */}
-      <div className="bg-green-800 pt-28 pb-16 px-4 text-center text-white">
-        <p className="text-green-300 text-xs font-semibold tracking-widest uppercase mb-3">
-          Masjid Al-Muahhidin
-        </p>
-        <h1 className="text-4xl font-bold mb-2">Kegiatan Masjid</h1>
-        <p className="text-green-200 text-sm">
-          Jadwal kegiatan rutin untuk seluruh jamaah
-        </p>
+      <div
+        className="relative overflow-hidden pt-28 pb-16 px-4 text-center text-white"
+        style={{ backgroundColor: "var(--masjid-green)" }}
+      >
+        <div
+          className="absolute inset-0"
+          style={{ backgroundImage: arabesque, backgroundSize: "80px 80px" }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/30" />
+        <div className="relative">
+          <p
+            className="text-xs font-semibold tracking-widest uppercase mb-3"
+            style={{ color: "var(--masjid-gold)" }}
+          >
+            Masjid Al-Muahhidin
+          </p>
+          <h1 className="text-4xl font-bold mb-2">Kegiatan Masjid</h1>
+          <p className="text-white/70 text-sm">
+            Jadwal kegiatan rutin untuk seluruh jamaah
+          </p>
+        </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 -mt-6 pb-16">
-        {/* Grid Kegiatan */}
+      <div className="max-w-4xl mx-auto px-4 -mt-6 pt-8 pb-16">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {kegiatanList.map((kegiatan) => (
             <div
               key={kegiatan.id}
-              className="bg-white rounded-2xl shadow-sm p-6 hover:shadow-md hover:-translate-y-1 transition-all border border-gray-100"
+              className="rounded-2xl p-6 hover:shadow-md hover:-translate-y-1 transition-all border"
+              style={{ backgroundColor: "white", borderColor: "#e5d9cc" }}
             >
-              {/* Top Row */}
               <div className="flex items-start justify-between mb-4">
-                <div className="w-14 h-14 bg-green-50 rounded-2xl flex items-center justify-center text-3xl">
+                <div
+                  className="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl"
+                  style={{ backgroundColor: "var(--masjid-cream-dark)" }}
+                >
                   {kegiatan.icon}
                 </div>
                 <span
-                  className={`text-xs font-semibold px-3 py-1 rounded-full ${kategoriWarna[kegiatan.kategori]}`}
+                  className="text-xs font-semibold px-3 py-1 rounded-full"
+                  style={{
+                    backgroundColor: kategoriWarna[kegiatan.kategori].bg,
+                    color: kategoriWarna[kegiatan.kategori].text,
+                  }}
                 >
                   {kegiatan.kategori}
                 </span>
               </div>
 
-              {/* Info */}
-              <h2 className="font-bold text-gray-800 text-lg mb-1">
+              <h2
+                className="font-bold text-lg mb-1"
+                style={{ color: "var(--masjid-green)" }}
+              >
                 {kegiatan.nama}
               </h2>
               <p className="text-gray-500 text-sm mb-4">{kegiatan.deskripsi}</p>
 
-              {/* Detail */}
-              <div className="border-t border-gray-100 pt-4 flex flex-col gap-2">
-                <div className="flex items-center gap-2 text-sm text-gray-500">
-                  <span className="text-base">📅</span>
-                  <span>{kegiatan.hari}</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm text-gray-500">
-                  <span className="text-base">🕐</span>
-                  <span>{kegiatan.waktu}</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm text-gray-500">
-                  <span className="text-base">📍</span>
-                  <span>{kegiatan.tempat}</span>
-                </div>
+              <div
+                className="border-t pt-4 flex flex-col gap-2"
+                style={{ borderColor: "#e5d9cc" }}
+              >
+                {[
+                  { icon: "📅", text: kegiatan.hari },
+                  { icon: "🕐", text: kegiatan.waktu },
+                  { icon: "📍", text: kegiatan.tempat },
+                ].map((item, i) => (
+                  <div
+                    key={i}
+                    className="flex items-center gap-2 text-sm text-gray-500"
+                  >
+                    <span>{item.icon}</span>
+                    <span>{item.text}</span>
+                  </div>
+                ))}
               </div>
             </div>
           ))}
         </div>
 
         {/* Banner */}
-        <div className="mt-10 bg-green-800 rounded-2xl p-8 text-center text-white">
-          <p className="text-2xl mb-2">🤝</p>
-          <h3 className="font-bold text-lg mb-2">
-            Ingin Menambahkan Kegiatan?
-          </h3>
-          <p className="text-green-200 text-sm">
-            Hubungi pengurus masjid untuk informasi pendaftaran dan penambahan
-            kegiatan baru.
-          </p>
+        <div
+          className="mt-10 rounded-2xl p-8 text-center text-white relative overflow-hidden"
+          style={{ backgroundColor: "var(--masjid-green)" }}
+        >
+          <div
+            className="absolute inset-0"
+            style={{ backgroundImage: arabesque, backgroundSize: "80px 80px" }}
+          />
+          <div className="relative">
+            <p className="text-2xl mb-2">🤝</p>
+            <h3 className="font-bold text-lg mb-2">
+              Ingin Menambahkan Kegiatan?
+            </h3>
+            <p className="text-sm" style={{ color: "rgba(255,255,255,0.6)" }}>
+              Hubungi pengurus masjid untuk informasi pendaftaran dan penambahan
+              kegiatan baru.
+            </p>
+          </div>
         </div>
       </div>
     </div>

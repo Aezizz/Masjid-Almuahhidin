@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 
 const KOTA_ID = "1219";
 
+const arabesque = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='%23ffffff' stroke-width='0.5' opacity='0.15'%3E%3Cpath d='M40 0 L80 40 L40 80 L0 40 Z'/%3E%3Cpath d='M40 10 L70 40 L40 70 L10 40 Z'/%3E%3Ccircle cx='40' cy='40' r='15'/%3E%3Ccircle cx='40' cy='40' r='25'/%3E%3Cpath d='M40 0 L40 80 M0 40 L80 40'/%3E%3Cpath d='M15 15 L65 65 M65 15 L15 65'/%3E%3C/g%3E%3C/svg%3E")`;
+
 const WAKTU_SHOLAT = [
   { key: "subuh", label: "Subuh", icon: "🌙", desc: "Fajar" },
   { key: "dzuhur", label: "Dzuhur", icon: "☀️", desc: "Tengah Hari" },
@@ -51,11 +53,9 @@ function Jadwal() {
         day: "numeric",
       }),
     );
-
     const y = now.getFullYear();
     const m = now.getMonth() + 1;
     const d = now.getDate();
-
     fetch(`https://api.myquran.com/v2/sholat/jadwal/${KOTA_ID}/${y}/${m}/${d}`)
       .then((res) => res.json())
       .then((data) => {
@@ -81,30 +81,47 @@ function Jadwal() {
   const waktuBerikutnya = getWaktuBerikutnya(jadwal);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div
+      className="min-h-screen"
+      style={{ backgroundColor: "var(--masjid-cream)" }}
+    >
       {/* Header */}
-      <div className="bg-green-800 pt-28 pb-16 px-4 text-center text-white">
-        <p className="text-green-300 text-xs font-semibold tracking-widest uppercase mb-3">
-          Masjid Al-Muahhidin — Depok
-        </p>
-        <h1 className="text-4xl font-bold mb-2">Jadwal Sholat</h1>
-        <p className="text-green-200 text-sm">{tanggal}</p>
-        {countdown && (
-          <div className="mt-4 inline-block bg-white/10 backdrop-blur px-5 py-2 rounded-full text-sm text-green-100">
-            ⏳ {countdown}
-            <p></p>
-          </div>
-        )}
+      <div
+        className="relative overflow-hidden pt-28 pb-16 px-4 text-center text-white"
+        style={{ backgroundColor: "var(--masjid-green)" }}
+      >
+        <div
+          className="absolute inset-0"
+          style={{ backgroundImage: arabesque, backgroundSize: "80px 80px" }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/30" />
+        <div className="relative">
+          <p
+            className="text-xs font-semibold tracking-widest uppercase mb-3"
+            style={{ color: "var(--masjid-gold)" }}
+          >
+            Masjid Al-Muahhidin — Depok
+          </p>
+          <h1 className="text-4xl font-bold mb-2">Jadwal Sholat</h1>
+          <p className="text-white/70 text-sm">{tanggal}</p>
+          {countdown && (
+            <div
+              className="mt-4 inline-block backdrop-blur px-5 py-2 rounded-full text-sm border border-white/20"
+              style={{ backgroundColor: "rgba(255,255,255,0.1)" }}
+            >
+              ⏳ {countdown}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Cards */}
-      <div className="max-w-2xl mx-auto px-4 -mt-6 pb-16">
+      <div className="max-w-2xl mx-auto px-4 -mt-6 pt-8 pb-16">
         {loading && (
           <div className="text-center text-gray-400 py-20">
             Memuat jadwal sholat...
           </div>
         )}
-
         {error && <div className="text-center text-red-400 py-20">{error}</div>}
 
         {jadwal && (
@@ -114,35 +131,59 @@ function Jadwal() {
               return (
                 <div
                   key={waktu.key}
-                  className={`flex items-center justify-between px-6 py-5 rounded-2xl transition-all ${
+                  className="flex items-center justify-between px-6 py-5 rounded-2xl transition-all"
+                  style={
                     isBerikutnya
-                      ? "bg-green-700 text-white shadow-lg shadow-green-200 scale-[1.02]"
-                      : "bg-white text-gray-800 shadow-sm"
-                  }`}
+                      ? {
+                          backgroundColor: "var(--masjid-green)",
+                          transform: "scale(1.02)",
+                          boxShadow: "0 8px 30px rgba(26,61,43,0.3)",
+                        }
+                      : {
+                          backgroundColor: "white",
+                          border: "1px solid #e5d9cc",
+                        }
+                  }
                 >
                   <div className="flex items-center gap-4">
                     <div
-                      className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl ${
-                        isBerikutnya ? "bg-white/20" : "bg-green-50"
-                      }`}
+                      className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl"
+                      style={{
+                        backgroundColor: isBerikutnya
+                          ? "rgba(255,255,255,0.15)"
+                          : "var(--masjid-cream-dark)",
+                      }}
                     >
                       {waktu.icon}
                     </div>
                     <div>
                       <p
-                        className={`font-bold text-lg ${isBerikutnya ? "text-white" : "text-gray-800"}`}
+                        className="font-bold text-lg"
+                        style={{
+                          color: isBerikutnya ? "white" : "var(--masjid-green)",
+                        }}
                       >
                         {waktu.label}
                       </p>
                       <p
-                        className={`text-xs ${isBerikutnya ? "text-green-200" : "text-gray-400"}`}
+                        className="text-xs"
+                        style={{
+                          color: isBerikutnya
+                            ? "rgba(255,255,255,0.6)"
+                            : "#9ca3af",
+                        }}
                       >
                         {isBerikutnya ? "⚡ Waktu berikutnya" : waktu.desc}
                       </p>
                     </div>
                   </div>
                   <p
-                    className={`text-2xl font-mono font-bold ${isBerikutnya ? "text-white" : "text-green-700"}`}
+                    className="text-2xl font-mono font-bold"
+                    style={{
+                      color: isBerikutnya
+                        ? "var(--masjid-gold)"
+                        : "var(--masjid-green)",
+                    }}
                   >
                     {jadwal[waktu.key]}
                   </p>
@@ -153,11 +194,20 @@ function Jadwal() {
         )}
 
         {/* Info */}
-        <div className="mt-8 bg-green-50 border border-green-100 rounded-2xl p-5 text-center">
-          <p className="text-green-700 text-sm font-medium">
+        <div
+          className="mt-8 rounded-2xl p-5 text-center border"
+          style={{
+            backgroundColor: "var(--masjid-cream-dark)",
+            borderColor: "#e5d9cc",
+          }}
+        >
+          <p
+            className="text-sm font-medium"
+            style={{ color: "var(--masjid-green)" }}
+          >
             📍 Jadwal untuk wilayah Depok, Jawa Barat
           </p>
-          <p className="text-green-500 text-xs mt-1">
+          <p className="text-xs mt-1 text-gray-400">
             Sumber: MyQuran API • Diperbarui setiap hari
           </p>
         </div>
