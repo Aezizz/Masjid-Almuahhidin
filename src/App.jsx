@@ -10,7 +10,7 @@ function App() {
   return (
     <BrowserRouter>
       <Navbar />
-      <main>
+      <main className="min-h-screen">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/jadwal" element={<Jadwal />} />
