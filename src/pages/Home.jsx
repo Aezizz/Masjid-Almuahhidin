@@ -69,7 +69,7 @@ function Home() {
               to="/donasi"
               className="bg-white text-green-800 font-bold px-8 py-4 rounded-full hover:bg-green-50 transition-all hover:scale-105 shadow-lg"
             >
-              💝 Donasi Sekarang
+              💝 Infaq Sekarang
             </Link>
             <Link
               to="/jadwal"

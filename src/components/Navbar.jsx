@@ -16,7 +16,7 @@ function Navbar() {
     { label: "Beranda", to: "/" },
     { label: "Jadwal Sholat", to: "/jadwal" },
     { label: "Kegiatan", to: "/kegiatan" },
-    { label: "Donasi", to: "/donasi" },
+    { label: "Infaq", to: "/donasi" },
   ];
 
   return (
@@ -61,7 +61,7 @@ function Navbar() {
           to="/donasi"
           className="flex items-center gap-2 bg-white text-green-900 font-bold text-sm px-5 py-2 rounded-full hover:bg-green-50 transition-all hover:scale-105"
         >
-          💝 Donasi
+          💝 Infaq
         </Link>
       </nav>
 
@@ -102,7 +102,7 @@ function Navbar() {
               className="text-center bg-white text-green-900 font-bold text-sm px-5 py-2 rounded-full mt-2"
               onClick={() => setMenuOpen(false)}
             >
-              💝 Donasi Sekarang
+              💝 Infaq Sekarang
             </Link>
           </div>
         )}

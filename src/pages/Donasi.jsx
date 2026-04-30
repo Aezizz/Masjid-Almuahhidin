@@ -27,7 +27,7 @@ function formatRupiah(angka) {
 }
 
 function parseCSV(text) {
-  const rows = text.trim().split("\n").slice(1); // skip header
+  const rows = text.trim().split("\n").slice(1);
   return rows.map((row) => {
     const [tanggal, keterangan, jumlah] = row.split(",");
     return {
@@ -38,18 +38,139 @@ function parseCSV(text) {
   });
 }
 
+function groupByTanggal(data) {
+  const grouped = {};
+  data.forEach((item) => {
+    if (!grouped[item.tanggal]) grouped[item.tanggal] = [];
+    grouped[item.tanggal].push(item);
+  });
+  return grouped;
+}
+
+function LaporanKeuangan({ laporan, loading, error }) {
+  const [lihatSemua, setLihatSemua] = useState(false);
+
+  const lima_terbaru = laporan.slice(0, 5);
+  const grouped = groupByTanggal(laporan);
+
+  if (loading)
+    return (
+      <div className="text-center text-gray-400 py-12">Memuat data...</div>
+    );
+
+  if (error)
+    return <div className="text-center text-red-400 py-12">{error}</div>;
+
+  return (
+    <div className="flex flex-col gap-4">
+      {/* Mode: 5 Terbaru */}
+      {!lihatSemua && (
+        <div className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
+          <div className="px-6 py-4 border-b border-gray-100">
+            <h3 className="font-bold text-gray-800">5 Transaksi Terbaru</h3>
+            <p className="text-gray-400 text-xs mt-0.5">
+              Data langsung dari Google Sheets pengurus
+            </p>
+          </div>
+
+          {lima_terbaru.map((item, i) => (
+            <div
+              key={i}
+              className="flex items-center justify-between px-6 py-4 border-b border-gray-50 last:border-0 hover:bg-gray-50 transition-colors"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center text-sm">
+                  💰
+                </div>
+                <div>
+                  <p className="font-medium text-gray-800 text-sm">
+                    {item.keterangan}
+                  </p>
+                  <p className="text-xs text-gray-400">{item.tanggal}</p>
+                </div>
+              </div>
+              <p className="font-bold text-green-700 text-sm">
+                {formatRupiah(item.jumlah)}
+              </p>
+            </div>
+          ))}
+
+          <button
+            onClick={() => setLihatSemua(true)}
+            className="w-full py-4 text-sm font-semibold text-green-700 hover:bg-green-50 transition-colors border-t border-gray-100"
+          >
+            Lihat Semua Transaksi →
+          </button>
+        </div>
+      )}
+
+      {/* Mode: Per Hari */}
+      {lihatSemua && (
+        <div className="flex flex-col gap-4">
+          <button
+            onClick={() => setLihatSemua(false)}
+            className="self-start text-sm font-semibold text-gray-500 hover:text-gray-700 flex items-center gap-1"
+          >
+            ← Kembali ke 5 Terbaru
+          </button>
+
+          {Object.entries(grouped).map(([tanggal, items]) => {
+            const totalHari = items.reduce((acc, i) => acc + i.jumlah, 0);
+            return (
+              <div
+                key={tanggal}
+                className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden"
+              >
+                <div className="px-6 py-3 bg-green-50 border-b border-green-100 flex items-center justify-between">
+                  <p className="font-bold text-green-800 text-sm">
+                    📅 {tanggal}
+                  </p>
+                  <p className="text-xs font-semibold text-green-600">
+                    {formatRupiah(totalHari)}
+                  </p>
+                </div>
+
+                <div className="max-h-60 overflow-y-auto">
+                  {items.map((item, i) => (
+                    <div
+                      key={i}
+                      className="flex items-center justify-between px-6 py-3 border-b border-gray-50 last:border-0 hover:bg-gray-50 transition-colors"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-7 h-7 bg-green-100 rounded-full flex items-center justify-center text-xs">
+                          💰
+                        </div>
+                        <p className="text-sm text-gray-700">
+                          {item.keterangan}
+                        </p>
+                      </div>
+                      <p className="font-semibold text-green-700 text-sm">
+                        {formatRupiah(item.jumlah)}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function Donasi() {
   const [copied, setCopied] = useState(null);
   const [laporan, setLaporan] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [activeTab, setActiveTab] = useState("rekening");
 
   useEffect(() => {
     fetch(SHEETS_URL)
       .then((res) => res.text())
       .then((text) => {
-        const data = parseCSV(text);
-        setLaporan(data);
+        setLaporan(parseCSV(text));
         setLoading(false);
       })
       .catch(() => {
@@ -67,105 +188,112 @@ function Donasi() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-12">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="text-center mb-10">
-        <h1 className="text-3xl font-bold text-green-800 mb-2">
-          Donasi & Infaq
-        </h1>
-        <p className="text-gray-500">
+      <div className="bg-green-800 pt-28 pb-16 px-4 text-center text-white">
+        <p className="text-green-300 text-xs font-semibold tracking-widest uppercase mb-3">
+          Masjid Al-Muahhidin
+        </p>
+        <h1 className="text-4xl font-bold mb-2">Donasi & Infaq</h1>
+        <p className="text-green-200 text-sm">
           Salurkan donasi Anda untuk kemakmuran Masjid Al-Muahhidin
         </p>
+
+        <div className="mt-8 inline-block bg-white/10 backdrop-blur border border-white/20 rounded-2xl px-10 py-5">
+          <p className="text-green-200 text-xs mb-1">Total Saldo Sedekah</p>
+          {loading ? (
+            <p className="text-2xl font-bold">Memuat...</p>
+          ) : (
+            <p className="text-3xl font-bold">{formatRupiah(totalSaldo)}</p>
+          )}
+          <p className="text-green-300 text-xs mt-1">
+            *Diperbarui secara berkala
+          </p>
+        </div>
       </div>
 
-      {/* Rekening */}
-      <h2 className="text-xl font-bold text-green-800 mb-4">
-        💳 Nomor Rekening
-      </h2>
-      <div className="flex flex-col gap-4 mb-10">
-        {rekeningList.map((rek, i) => (
-          <div
-            key={i}
-            className="bg-white border border-gray-100 rounded-2xl shadow-sm p-5"
-          >
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-500 mb-1">
-                  {rek.icon} {rek.bank}
-                </p>
-                <p className="text-2xl font-mono font-bold text-green-800">
-                  {rek.noRek}
-                </p>
-                <p className="text-sm text-gray-500 mt-1">
-                  a.n. {rek.atasNama}
+      <div className="max-w-3xl mx-auto px-4 -mt-6 pb-16">
+        {/* Tab */}
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-1.5 flex gap-1 mb-6">
+          {[
+            { key: "rekening", label: "💳 Cara Donasi" },
+            { key: "laporan", label: "📊 Laporan Keuangan" },
+          ].map((tab) => (
+            <button
+              key={tab.key}
+              onClick={() => setActiveTab(tab.key)}
+              className={`flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all ${
+                activeTab === tab.key
+                  ? "bg-green-700 text-white shadow-sm"
+                  : "text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Tab: Cara Donasi */}
+        {activeTab === "rekening" && (
+          <div className="flex flex-col gap-5">
+            <div>
+              <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-widest mb-3">
+                Nomor Rekening
+              </h2>
+              <div className="flex flex-col gap-3">
+                {rekeningList.map((rek, i) => (
+                  <div
+                    key={i}
+                    className="bg-white border border-gray-100 rounded-2xl shadow-sm p-5"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-xs text-gray-400 mb-1">
+                          {rek.icon} {rek.bank}
+                        </p>
+                        <p className="text-2xl font-mono font-bold text-green-800">
+                          {rek.noRek}
+                        </p>
+                        <p className="text-xs text-gray-400 mt-1">
+                          a.n. {rek.atasNama}
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => copyToClipboard(rek.noRek, i)}
+                        className={`text-sm font-semibold px-4 py-2 rounded-full transition-all ${
+                          copied === i
+                            ? "bg-green-100 text-green-700"
+                            : "bg-gray-100 text-gray-600 hover:bg-green-100 hover:text-green-700"
+                        }`}
+                      >
+                        {copied === i ? "✅ Tersalin!" : "Salin"}
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-widest mb-3">
+                QRIS
+              </h2>
+              <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-6 text-center">
+                <div className="bg-gray-50 rounded-xl w-48 h-48 mx-auto flex items-center justify-center text-gray-300 text-sm border-2 border-dashed border-gray-200">
+                  📱 Upload QRIS di sini
+                </div>
+                <p className="text-gray-400 text-xs mt-3">
+                  Scan QRIS untuk donasi via aplikasi apapun
                 </p>
               </div>
-              <button
-                onClick={() => copyToClipboard(rek.noRek, i)}
-                className="bg-green-100 text-green-700 font-semibold text-sm px-4 py-2 rounded-full hover:bg-green-200 transition-colors"
-              >
-                {copied === i ? "✅ Tersalin!" : "Salin"}
-              </button>
             </div>
           </div>
-        ))}
-      </div>
-
-      {/* QRIS */}
-      <h2 className="text-xl font-bold text-green-800 mb-4">📱 QRIS</h2>
-      <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-6 text-center mb-10">
-        <div className="bg-gray-100 rounded-xl w-48 h-48 mx-auto flex items-center justify-center text-gray-400 text-sm">
-          Upload foto QRIS di sini
-        </div>
-        <p className="text-gray-500 text-sm mt-3">
-          Scan QRIS untuk donasi via aplikasi apapun
-        </p>
-      </div>
-
-      {/* Saldo */}
-      <h2 className="text-xl font-bold text-green-800 mb-4">
-        📊 Laporan Keuangan
-      </h2>
-      <div className="bg-green-700 text-white rounded-2xl p-6 text-center mb-6">
-        <p className="text-green-200 text-sm mb-1">Total Saldo Sedekah</p>
-        {loading ? (
-          <p className="text-2xl font-bold">Memuat...</p>
-        ) : (
-          <p className="text-4xl font-bold">{formatRupiah(totalSaldo)}</p>
-        )}
-        <p className="text-green-300 text-xs mt-2">
-          *Data diperbarui secara berkala
-        </p>
-      </div>
-
-      {/* Riwayat */}
-      <div className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
-        <div className="px-6 py-4 border-b border-gray-100">
-          <h3 className="font-bold text-green-800">Riwayat Pemasukan</h3>
-        </div>
-
-        {loading && (
-          <div className="text-center text-gray-400 py-10">Memuat data...</div>
         )}
 
-        {error && <div className="text-center text-red-400 py-10">{error}</div>}
-
-        {!loading &&
-          !error &&
-          laporan.map((item, i) => (
-            <div
-              key={i}
-              className="flex items-center justify-between px-6 py-4 border-b border-gray-50 last:border-0"
-            >
-              <div>
-                <p className="font-medium text-gray-800">{item.keterangan}</p>
-                <p className="text-xs text-gray-400">{item.tanggal}</p>
-              </div>
-              <p className="font-bold text-green-700">
-                {formatRupiah(item.jumlah)}
-              </p>
-            </div>
-          ))}
+        {/* Tab: Laporan */}
+        {activeTab === "laporan" && (
+          <LaporanKeuangan laporan={laporan} loading={loading} error={error} />
+        )}
       </div>
     </div>
   );

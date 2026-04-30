@@ -92,6 +92,7 @@ function Jadwal() {
         {countdown && (
           <div className="mt-4 inline-block bg-white/10 backdrop-blur px-5 py-2 rounded-full text-sm text-green-100">
             ⏳ {countdown}
+            <p></p>
           </div>
         )}
       </div>
