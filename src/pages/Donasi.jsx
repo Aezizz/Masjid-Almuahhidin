@@ -259,8 +259,18 @@ function Donasi() {
               <div className="flex flex-col gap-3">
                 {rekeningList.map((rek, i) => (
                   <div
-                    key={i}
-                    className="bg-white border border-gray-100 rounded-2xl shadow-sm p-5"
+                    className="rounded-2xl p-6"
+                    style={{
+                      backgroundColor: "white",
+                      transition: "box-shadow 0.3s ease, transform 0.3s ease",
+                    }}
+                    onMouseEnter={(e) =>
+                      (e.currentTarget.style.boxShadow =
+                        "0 0 0 2px var(--masjid-green)")
+                    }
+                    onMouseLeave={(e) =>
+                      (e.currentTarget.style.boxShadow = "none")
+                    }
                   >
                     <div className="flex items-center justify-between">
                       <div>

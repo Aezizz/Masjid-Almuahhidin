@@ -178,9 +178,14 @@ function Home() {
                 to={item.to}
                 className="rounded-2xl p-6 shadow-sm border hover:shadow-md hover:-translate-y-1 transition-all group"
                 style={{
-                  backgroundColor: "var(--masjid-cream)",
-                  borderColor: "#e5d9cc",
+                  backgroundColor: "white",
+                  transition: "box-shadow 0.3s ease, transform 0.3s ease",
                 }}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.boxShadow =
+                    "0 0 0 2px var(--masjid-green)")
+                }
+                onMouseLeave={(e) => (e.currentTarget.style.boxShadow = "none")}
               >
                 <div className="text-4xl mb-4">{item.icon}</div>
                 <h3
