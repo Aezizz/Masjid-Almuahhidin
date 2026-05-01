@@ -36,6 +36,98 @@ function getCountdown(jadwal, waktuKey) {
   return h > 0 ? `${h} jam ${m} menit lagi` : `${m} menit lagi`;
 }
 
+function useCountUp(target, duration = 800, delay = 0) {
+  const [display, setDisplay] = useState("00:00");
+
+  useEffect(() => {
+    if (!target) return;
+    const [jamTarget, menitTarget] = target.split(":").map(Number);
+    const totalMenitTarget = jamTarget * 60 + menitTarget;
+    const steps = 30;
+    const stepTime = duration / steps;
+
+    const timeout = setTimeout(() => {
+      let step = 0;
+      const interval = setInterval(() => {
+        step++;
+        const current = Math.floor((totalMenitTarget * step) / steps);
+        const j = Math.floor(current / 60)
+          .toString()
+          .padStart(2, "0");
+        const m = (current % 60).toString().padStart(2, "0");
+        setDisplay(`${j}:${m}`);
+        if (step >= steps) {
+          clearInterval(interval);
+          setDisplay(target);
+        }
+      }, stepTime);
+    }, delay);
+
+    return () => clearTimeout(timeout);
+  }, [target, duration, delay]);
+
+  return display;
+}
+
+function WaktuCard({ waktu, jadwal, isBerikutnya, index }) {
+  const displayWaktu = useCountUp(jadwal?.[waktu.key], 800, index * 150 + 300);
+
+  return (
+    <div
+      className={`fade-in-up flex items-center justify-between px-6 py-5 rounded-2xl transition-all ${
+        isBerikutnya ? "card-border-animated" : ""
+      }`}
+      style={{
+        animationDelay: `${index * 150}ms`,
+        ...(isBerikutnya
+          ? { backgroundColor: "var(--masjid-green)", transform: "scale(1.02)" }
+          : {
+              backgroundColor: "white",
+              border: "1px solid #e5d9cc",
+              outline: "1.5px solid #1a1a1a",
+            }),
+      }}
+    >
+      <div className="flex items-center gap-4">
+        <div
+          className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl"
+          style={{
+            backgroundColor: isBerikutnya
+              ? "rgba(255,255,255,0.15)"
+              : "var(--masjid-cream-dark)",
+          }}
+        >
+          {waktu.icon}
+        </div>
+        <div>
+          <p
+            className="font-bold text-lg"
+            style={{ color: isBerikutnya ? "white" : "var(--masjid-green)" }}
+          >
+            {waktu.label}
+          </p>
+          <p
+            className="text-xs"
+            style={{
+              color: isBerikutnya ? "rgba(255,255,255,0.6)" : "#9ca3af",
+            }}
+          >
+            {isBerikutnya ? "⚡ Waktu berikutnya" : waktu.desc}
+          </p>
+        </div>
+      </div>
+      <p
+        className="text-2xl font-mono font-bold"
+        style={{
+          color: isBerikutnya ? "var(--masjid-gold)" : "var(--masjid-green)",
+        }}
+      >
+        {displayWaktu}
+      </p>
+    </div>
+  );
+}
+
 function Jadwal() {
   const [jadwal, setJadwal] = useState(null);
   const [tanggal, setTanggal] = useState("");
@@ -126,70 +218,15 @@ function Jadwal() {
 
         {jadwal && (
           <div className="flex flex-col gap-3">
-            {WAKTU_SHOLAT.map((waktu) => {
-              const isBerikutnya = waktu.key === waktuBerikutnya;
-              return (
-                <div
-                  key={waktu.key}
-                  className="flex items-center justify-between px-6 py-5 rounded-2xl transition-all"
-                  style={
-                    isBerikutnya
-                      ? {
-                          backgroundColor: "var(--masjid-green)",
-                          transform: "scale(1.02)",
-                          boxShadow: "0 8px 30px rgba(26,61,43,0.3)",
-                        }
-                      : {
-                          backgroundColor: "white",
-                          border: "1px solid #e5d9cc",
-                        }
-                  }
-                >
-                  <div className="flex items-center gap-4">
-                    <div
-                      className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl"
-                      style={{
-                        backgroundColor: isBerikutnya
-                          ? "rgba(255,255,255,0.15)"
-                          : "var(--masjid-cream-dark)",
-                      }}
-                    >
-                      {waktu.icon}
-                    </div>
-                    <div>
-                      <p
-                        className="font-bold text-lg"
-                        style={{
-                          color: isBerikutnya ? "white" : "var(--masjid-green)",
-                        }}
-                      >
-                        {waktu.label}
-                      </p>
-                      <p
-                        className="text-xs"
-                        style={{
-                          color: isBerikutnya
-                            ? "rgba(255,255,255,0.6)"
-                            : "#9ca3af",
-                        }}
-                      >
-                        {isBerikutnya ? "⚡ Waktu berikutnya" : waktu.desc}
-                      </p>
-                    </div>
-                  </div>
-                  <p
-                    className="text-2xl font-mono font-bold"
-                    style={{
-                      color: isBerikutnya
-                        ? "var(--masjid-gold)"
-                        : "var(--masjid-green)",
-                    }}
-                  >
-                    {jadwal[waktu.key]}
-                  </p>
-                </div>
-              );
-            })}
+            {WAKTU_SHOLAT.map((waktu, index) => (
+              <WaktuCard
+                key={waktu.key}
+                waktu={waktu}
+                jadwal={jadwal}
+                isBerikutnya={waktu.key === waktuBerikutnya}
+                index={index}
+              />
+            ))}
           </div>
         )}
 

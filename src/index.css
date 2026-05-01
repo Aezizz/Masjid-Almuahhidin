@@ -7,8 +7,65 @@
   --masjid-cream: #f8f4ef;
   --masjid-cream-dark: #f0e9e0;
   --masjid-gold: #c9a84c;
+  --masjid-gold-1: #ffd700;
 }
 
 body {
   background-color: var(--masjid-cream);
+}
+
+@keyframes borderRotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.card-border-animated {
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.card-border-animated::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -100%;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    var(--masjid-gold-1) 170deg,
+    transparent 200deg,
+    transparent 360deg
+  );
+  animation: borderRotate 3s linear infinite;
+}
+
+.card-border-animated::after {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border-radius: 16px;
+  background-color: var(--masjid-green);
+  z-index: -1;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  opacity: 0;
+  animation: fadeInUp 0.5s ease forwards;
 }

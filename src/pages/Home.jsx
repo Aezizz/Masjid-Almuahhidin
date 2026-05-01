@@ -1,4 +1,16 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import AOS from "aos";
+import "aos/dist/aos.css";
+
+function useJamRealtime() {
+  const [jam, setJam] = useState(new Date());
+  useEffect(() => {
+    const interval = setInterval(() => setJam(new Date()), 1000);
+    return () => clearInterval(interval);
+  }, []);
+  return jam;
+}
 
 const arabesque = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='%23ffffff' stroke-width='0.5' opacity='0.15'%3E%3Cpath d='M40 0 L80 40 L40 80 L0 40 Z'/%3E%3Cpath d='M40 10 L70 40 L40 70 L10 40 Z'/%3E%3Ccircle cx='40' cy='40' r='15'/%3E%3Ccircle cx='40' cy='40' r='25'/%3E%3Cpath d='M40 0 L40 80 M0 40 L80 40'/%3E%3Cpath d='M15 15 L65 65 M65 15 L15 65'/%3E%3C/g%3E%3C/svg%3E")`;
 
@@ -41,6 +53,26 @@ const layanan = [
 ];
 
 function Home() {
+  const jam = useJamRealtime();
+
+  useEffect(() => {
+    AOS.init({ duration: 700, once: true, easing: "ease-out-cubic" });
+  }, []);
+
+  const jamString = jam.toLocaleTimeString("id-ID", {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false,
+  });
+
+  const hariString = jam.toLocaleDateString("id-ID", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+
   return (
     <div>
       {/* Hero */}
@@ -66,6 +98,35 @@ function Home() {
             <br />
             <span style={{ color: "var(--masjid-gold)" }}>Al-Muahhidin</span>
           </h1>
+
+          {/* Jam Realtime */}
+          <div className="mb-8">
+            <div className="flex items-end justify-center gap-1">
+              <p
+                className="font-mono font-bold tracking-widest text-5xl md:text-6xl"
+                style={{
+                  color: "var(--masjid-gold)",
+                  textShadow:
+                    "0 0 30px rgba(201,168,76,0.5), 0 0 60px rgba(201,168,76,0.2)",
+                }}
+              >
+                {jamString.slice(0, 5)}
+              </p>
+              <p
+                className="font-mono font-light tracking-widest text-2xl md:text-3xl mb-1"
+                style={{
+                  color: "rgba(201,168,76,0.6)",
+                  textShadow: "0 0 20px rgba(201,168,76,0.3)",
+                }}
+              >
+                :{jamString.slice(6, 8)}
+              </p>
+            </div>
+            <p className="text-white/40 text-xs mt-2 tracking-widest uppercase">
+              {hariString}
+            </p>
+          </div>
+
           <p className="text-white/80 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
             Memakmurkan masjid, mempererat ukhuwah islamiyah. Bersama kita
             bangun rumah Allah yang bermartabat.
@@ -106,6 +167,8 @@ function Home() {
           {stats.map((stat, i) => (
             <div
               key={i}
+              data-aos="fade-up"
+              data-aos-delay={i * 100}
               className="group relative rounded-2xl p-6 text-center cursor-default overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-xl border"
               style={{
                 backgroundColor: "white",
@@ -117,19 +180,14 @@ function Home() {
                 (e.currentTarget.style.color = "var(--masjid-green)")
               }
             >
-              {/* Background hover effect */}
               <div
                 className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                 style={{ backgroundColor: "var(--masjid-green)" }}
               />
-
-              {/* Gold bar animasi di bawah */}
               <div
                 className="absolute bottom-0 left-0 h-1 w-0 group-hover:w-full transition-all duration-500 rounded-b-2xl"
                 style={{ backgroundColor: "var(--masjid-gold)" }}
               />
-
-              {/* Konten */}
               <div className="relative z-10">
                 <p
                   className="text-4xl font-bold mb-1 transition-colors duration-300"
@@ -152,7 +210,7 @@ function Home() {
         style={{ backgroundColor: "var(--masjid-cream-dark)" }}
       >
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
+          <div className="text-center mb-12" data-aos="fade-up">
             <p
               className="text-sm font-semibold tracking-widest uppercase mb-3"
               style={{ color: "var(--masjid-gold)" }}
@@ -176,20 +234,32 @@ function Home() {
               <Link
                 key={i}
                 to={item.to}
-                className="rounded-2xl p-6 shadow-sm border hover:shadow-md hover:-translate-y-1 transition-all group"
+                data-aos="fade-up"
+                data-aos-delay={i * 100}
+                className="rounded-2xl p-6 hover:-translate-y-1 transition-all group"
                 style={{
-                  backgroundColor: "white",
-                  transition: "box-shadow 0.3s ease, transform 0.3s ease",
+                  backgroundColor: "rgba(255,255,255,0.6)",
+                  backdropFilter: "blur(12px)",
+                  WebkitBackdropFilter: "blur(12px)",
+                  border: "1px solid rgba(255,255,255,0.4)",
+                  boxShadow: "0 4px 24px rgba(26,61,43,0.08)",
                 }}
-                onMouseEnter={(e) =>
-                  (e.currentTarget.style.boxShadow =
-                    "0 0 0 2px var(--masjid-green)")
-                }
-                onMouseLeave={(e) => (e.currentTarget.style.boxShadow = "none")}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor =
+                    "rgba(255,255,255,0.8)";
+                  e.currentTarget.style.boxShadow =
+                    "0 0 0 2px var(--masjid-green), 0 8px 32px rgba(26,61,43,0.15)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor =
+                    "rgba(255,255,255,0.6)";
+                  e.currentTarget.style.boxShadow =
+                    "0 4px 24px rgba(26,61,43,0.08)";
+                }}
               >
                 <div className="text-4xl mb-4">{item.icon}</div>
                 <h3
-                  className="font-bold mb-2 group-hover:transition-colors"
+                  className="font-bold mb-2"
                   style={{ color: "var(--masjid-green)" }}
                 >
                   {item.judul}
@@ -212,7 +282,7 @@ function Home() {
           className="absolute inset-0"
           style={{ backgroundImage: arabesque, backgroundSize: "80px 80px" }}
         />
-        <div className="relative max-w-2xl mx-auto">
+        <div className="relative max-w-2xl mx-auto" data-aos="fade-up">
           <p
             className="text-sm font-semibold tracking-widest uppercase mb-4"
             style={{ color: "var(--masjid-gold)" }}
