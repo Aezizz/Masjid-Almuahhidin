@@ -11,6 +11,15 @@ function useJamRealtime() {
   }, []);
   return jam;
 }
+function useParallax() {
+  const [offset, setOffset] = useState(0);
+  useEffect(() => {
+    const handleScroll = () => setOffset(window.scrollY);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+  return offset;
+}
 
 const arabesque = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='%23ffffff' stroke-width='0.5' opacity='0.15'%3E%3Cpath d='M40 0 L80 40 L40 80 L0 40 Z'/%3E%3Cpath d='M40 10 L70 40 L40 70 L10 40 Z'/%3E%3Ccircle cx='40' cy='40' r='15'/%3E%3Ccircle cx='40' cy='40' r='25'/%3E%3Cpath d='M40 0 L40 80 M0 40 L80 40'/%3E%3Cpath d='M15 15 L65 65 M65 15 L15 65'/%3E%3C/g%3E%3C/svg%3E")`;
 
@@ -54,6 +63,7 @@ const layanan = [
 
 function Home() {
   const jam = useJamRealtime();
+  const scrollOffset = useParallax();
 
   useEffect(() => {
     AOS.init({ duration: 700, once: true, easing: "ease-out-cubic" });
@@ -82,7 +92,12 @@ function Home() {
       >
         <div
           className="absolute inset-0"
-          style={{ backgroundImage: arabesque, backgroundSize: "80px 80px" }}
+          style={{
+            backgroundImage: arabesque,
+            backgroundSize: "80px 80px",
+            transform: `translateY(${scrollOffset * 0.3}px)`,
+            willChange: "transform",
+          }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/40" />
 
@@ -99,11 +114,23 @@ function Home() {
             <span style={{ color: "var(--masjid-gold)" }}>Al-Muahhidin</span>
           </h1>
 
+          {/* Divider */}
+          <div
+            className="w-16 h-px mx-auto"
+            style={{ backgroundColor: "rgba(201,168,76,0.4)" }}
+          />
+
           {/* Jam Realtime */}
-          <div className="mb-8">
+          <div
+            className="mt-6 mb-10 border rounded-2xl px-8 py-4 inline-block"
+            style={{
+              borderColor: "rgba(201,168,76,0.3)",
+              backgroundColor: "rgba(0,0,0,0.2)",
+            }}
+          >
             <div className="flex items-end justify-center gap-1">
               <p
-                className="font-mono font-bold tracking-widest text-5xl md:text-6xl"
+                className="font-mono font-bold tracking-widest text-5xl md:text-5xl"
                 style={{
                   color: "var(--masjid-gold)",
                   textShadow:
@@ -113,7 +140,7 @@ function Home() {
                 {jamString.slice(0, 5)}
               </p>
               <p
-                className="font-mono font-light tracking-widest text-2xl md:text-3xl mb-1"
+                className="font-mono font-light tracking-widest text-1xl md:text-1xl mb-0.01"
                 style={{
                   color: "rgba(201,168,76,0.6)",
                   textShadow: "0 0 20px rgba(201,168,76,0.3)",
@@ -150,11 +177,6 @@ function Home() {
               🕐 Jadwal Sholat
             </Link>
           </div>
-        </div>
-
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/40 text-xs flex flex-col items-center gap-2">
-          <span>Scroll</span>
-          <div className="w-px h-8 bg-white/20"></div>
         </div>
       </section>
 
@@ -279,8 +301,14 @@ function Home() {
         style={{ backgroundColor: "var(--masjid-green)" }}
       >
         <div
-          className="absolute inset-0"
-          style={{ backgroundImage: arabesque, backgroundSize: "80px 80px" }}
+          className="absolute"
+          style={{
+            backgroundImage: arabesque,
+            backgroundSize: "80px 80px",
+            transform: `translateY(${scrollOffset * 0.15}px)`,
+            willChange: "transform",
+            inset: "-50% -45%",
+          }}
         />
         <div className="relative max-w-2xl mx-auto" data-aos="fade-up">
           <p

@@ -12,6 +12,129 @@ const WAKTU_SHOLAT = [
   { key: "isya", label: "Isya", icon: "⭐", desc: "Malam" },
 ];
 
+const AYAT_HARIAN = [
+  {
+    ayat: "Sesungguhnya sholat itu mencegah dari perbuatan keji dan mungkar.",
+    sumber: "QS. Al-Ankabut: 45",
+  },
+  {
+    ayat: "Dan mohonlah pertolongan dengan sabar dan sholat.",
+    sumber: "QS. Al-Baqarah: 45",
+  },
+  {
+    ayat: "Karena sesungguhnya sesudah kesulitan itu ada kemudahan.",
+    sumber: "QS. Al-Insyirah: 5",
+  },
+  {
+    ayat: "Allah tidak membebani seseorang melainkan sesuai kesanggupannya.",
+    sumber: "QS. Al-Baqarah: 286",
+  },
+  {
+    ayat: "Ingatlah, hanya dengan mengingat Allah hati menjadi tenteram.",
+    sumber: "QS. Ar-Ra'd: 28",
+  },
+  {
+    ayat: "Dan bertawakallah kepada Allah. Cukuplah Allah sebagai pemelihara.",
+    sumber: "QS. Al-Ahzab: 3",
+  },
+  {
+    ayat: "Sesungguhnya Allah beserta orang-orang yang sabar.",
+    sumber: "QS. Al-Baqarah: 153",
+  },
+  {
+    ayat: "Barangsiapa bertakwa kepada Allah, niscaya Dia akan membukakan jalan keluar baginya.",
+    sumber: "QS. At-Thalaq: 2",
+  },
+  {
+    ayat: "Dan janganlah kamu berputus asa dari rahmat Allah.",
+    sumber: "QS. Az-Zumar: 53",
+  },
+  {
+    ayat: "Sesungguhnya orang-orang yang beriman dan beramal sholeh, mereka itu adalah sebaik-baik makhluk.",
+    sumber: "QS. Al-Bayyinah: 7",
+  },
+  {
+    ayat: "Wahai orang-orang yang beriman! Jadikanlah sabar dan sholat sebagai penolongmu.",
+    sumber: "QS. Al-Baqarah: 153",
+  },
+  {
+    ayat: "Dan Tuhanmu berfirman, 'Berdoalah kepada-Ku, niscaya akan Aku perkenankan bagimu.'",
+    sumber: "QS. Ghafir: 60",
+  },
+  {
+    ayat: "Sesungguhnya bersama kesulitan ada kemudahan.",
+    sumber: "QS. Al-Insyirah: 6",
+  },
+  {
+    ayat: "Allah akan meninggikan orang-orang yang beriman di antaramu dan orang-orang yang diberi ilmu pengetahuan.",
+    sumber: "QS. Al-Mujadilah: 11",
+  },
+  {
+    ayat: "Dan sebutlah nama Tuhanmu pada waktu pagi dan petang.",
+    sumber: "QS. Al-Insan: 25",
+  },
+  {
+    ayat: "Maka nikmat Tuhanmu yang manakah yang kamu dustakan?",
+    sumber: "QS. Ar-Rahman: 13",
+  },
+  {
+    ayat: "Sungguh, manusia diciptakan bersifat suka mengeluh.",
+    sumber: "QS. Al-Ma'arij: 19",
+  },
+  {
+    ayat: "Dan Kami jadikan dari air segala sesuatu yang hidup.",
+    sumber: "QS. Al-Anbiya: 30",
+  },
+  {
+    ayat: "Katakanlah, 'Dialah Allah, Yang Maha Esa.'",
+    sumber: "QS. Al-Ikhlas: 1",
+  },
+  {
+    ayat: "Sesungguhnya sholatku, ibadahku, hidupku, dan matiku hanyalah untuk Allah.",
+    sumber: "QS. Al-An'am: 162",
+  },
+  {
+    ayat: "Dan apabila hamba-hamba-Ku bertanya kepadamu tentang Aku, maka Aku dekat.",
+    sumber: "QS. Al-Baqarah: 186",
+  },
+  {
+    ayat: "Janganlah kamu bersikap lemah, dan janganlah pula kamu bersedih hati.",
+    sumber: "QS. Ali Imran: 139",
+  },
+  {
+    ayat: "Sesungguhnya Allah tidak mengubah keadaan suatu kaum hingga mereka mengubah diri mereka sendiri.",
+    sumber: "QS. Ar-Ra'd: 11",
+  },
+  {
+    ayat: "Dan bersabarlah kamu, sesungguhnya Allah beserta orang-orang yang sabar.",
+    sumber: "QS. Al-Anfal: 46",
+  },
+  {
+    ayat: "Hai jiwa yang tenang, kembalilah kepada Tuhanmu dengan hati yang puas lagi diridhai-Nya.",
+    sumber: "QS. Al-Fajr: 27-28",
+  },
+  {
+    ayat: "Maka dirikanlah sholat, sesungguhnya sholat itu kewajiban yang ditentukan waktunya.",
+    sumber: "QS. An-Nisa: 103",
+  },
+  {
+    ayat: "Sesungguhnya orang-orang yang selalu membaca kitab Allah dan mendirikan sholat akan mendapat pahala.",
+    sumber: "QS. Fatir: 29",
+  },
+  {
+    ayat: "Dan bertasbihlah dengan memuji Tuhanmu sebelum terbit matahari dan sebelum terbenamnya.",
+    sumber: "QS. Taha: 130",
+  },
+  {
+    ayat: "Kepunyaan Allah-lah apa yang ada di langit dan apa yang ada di bumi.",
+    sumber: "QS. Al-Baqarah: 284",
+  },
+  {
+    ayat: "Allah, tidak ada tuhan selain Dia. Yang Maha Hidup, Yang terus menerus mengurus makhluk-Nya.",
+    sumber: "QS. Al-Baqarah: 255",
+  },
+];
+
 function getWaktuBerikutnya(jadwal) {
   if (!jadwal) return null;
   const now = new Date();
@@ -36,16 +159,37 @@ function getCountdown(jadwal, waktuKey) {
   return h > 0 ? `${h} jam ${m} menit lagi` : `${m} menit lagi`;
 }
 
+function hitungDhuha(subuh) {
+  if (!subuh) return "-";
+  const [jam, menit] = subuh.split(":").map(Number);
+  const total = jam * 60 + menit + 20;
+  const j = Math.floor(total / 60)
+    .toString()
+    .padStart(2, "0");
+  const m = (total % 60).toString().padStart(2, "0");
+  return `${j}:${m}`;
+}
+
+function hitungTahajud(isya, subuh) {
+  if (!isya || !subuh) return "-";
+  const [jamIsya, menitIsya] = isya.split(":").map(Number);
+  const [jamSubuh, menitSubuh] = subuh.split(":").map(Number);
+  const totalIsya = jamIsya * 60 + menitIsya;
+  const totalSubuh = jamSubuh * 60 + menitSubuh + 24 * 60;
+  const sepertiga = Math.floor(totalIsya + (totalSubuh - totalIsya) * (2 / 3));
+  const j = (Math.floor(sepertiga / 60) % 24).toString().padStart(2, "0");
+  const m = (sepertiga % 60).toString().padStart(2, "0");
+  return `${j}:${m}`;
+}
+
 function useCountUp(target, duration = 800, delay = 0) {
   const [display, setDisplay] = useState("00:00");
-
   useEffect(() => {
     if (!target) return;
     const [jamTarget, menitTarget] = target.split(":").map(Number);
     const totalMenitTarget = jamTarget * 60 + menitTarget;
     const steps = 30;
     const stepTime = duration / steps;
-
     const timeout = setTimeout(() => {
       let step = 0;
       const interval = setInterval(() => {
@@ -62,21 +206,16 @@ function useCountUp(target, duration = 800, delay = 0) {
         }
       }, stepTime);
     }, delay);
-
     return () => clearTimeout(timeout);
   }, [target, duration, delay]);
-
   return display;
 }
 
 function WaktuCard({ waktu, jadwal, isBerikutnya, index }) {
   const displayWaktu = useCountUp(jadwal?.[waktu.key], 800, index * 150 + 300);
-
   return (
     <div
-      className={`fade-in-up flex items-center justify-between px-6 py-5 rounded-2xl transition-all ${
-        isBerikutnya ? "card-border-animated" : ""
-      }`}
+      className={`fade-in-up flex items-center justify-between px-6 py-5 rounded-2xl transition-all ${isBerikutnya ? "card-border-animated" : ""}`}
       style={{
         animationDelay: `${index * 150}ms`,
         ...(isBerikutnya
@@ -171,6 +310,7 @@ function Jadwal() {
   }, [jadwal]);
 
   const waktuBerikutnya = getWaktuBerikutnya(jadwal);
+  const ayatHari = AYAT_HARIAN[new Date().getDate() % AYAT_HARIAN.length];
 
   return (
     <div
@@ -207,46 +347,177 @@ function Jadwal() {
         </div>
       </div>
 
-      {/* Cards */}
-      <div className="max-w-2xl mx-auto px-4 -mt-6 pt-8 pb-16">
-        {loading && (
-          <div className="text-center text-gray-400 py-20">
-            Memuat jadwal sholat...
-          </div>
-        )}
-        {error && <div className="text-center text-red-400 py-20">{error}</div>}
+      {/* Content - 2 Kolom */}
+      <div className="max-w-5xl mx-auto px-4 -mt-6 pt-8 pb-16">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Kolom Kiri — Jadwal Utama */}
+          <div className="lg:col-span-2">
+            {loading && (
+              <div className="text-center text-gray-400 py-20">
+                Memuat jadwal sholat...
+              </div>
+            )}
+            {error && (
+              <div className="text-center text-red-400 py-20">{error}</div>
+            )}
+            {jadwal && (
+              <div className="flex flex-col gap-3">
+                {WAKTU_SHOLAT.map((waktu, index) => (
+                  <WaktuCard
+                    key={waktu.key}
+                    waktu={waktu}
+                    jadwal={jadwal}
+                    isBerikutnya={waktu.key === waktuBerikutnya}
+                    index={index}
+                  />
+                ))}
+              </div>
+            )}
 
-        {jadwal && (
-          <div className="flex flex-col gap-3">
-            {WAKTU_SHOLAT.map((waktu, index) => (
-              <WaktuCard
-                key={waktu.key}
-                waktu={waktu}
-                jadwal={jadwal}
-                isBerikutnya={waktu.key === waktuBerikutnya}
-                index={index}
-              />
-            ))}
+            {/* Info */}
+            <div
+              className="mt-6 rounded-2xl p-5 text-center border"
+              style={{
+                backgroundColor: "var(--masjid-cream-dark)",
+                borderColor: "#e5d9cc",
+              }}
+            >
+              <p
+                className="text-sm font-medium"
+                style={{ color: "var(--masjid-green)" }}
+              >
+                📍 Jadwal untuk wilayah Depok, Jawa Barat
+              </p>
+              <p className="text-xs mt-1 text-gray-400">
+                Sumber: MyQuran API • Diperbarui setiap hari
+              </p>
+            </div>
           </div>
-        )}
 
-        {/* Info */}
-        <div
-          className="mt-8 rounded-2xl p-5 text-center border"
-          style={{
-            backgroundColor: "var(--masjid-cream-dark)",
-            borderColor: "#e5d9cc",
-          }}
-        >
-          <p
-            className="text-sm font-medium"
-            style={{ color: "var(--masjid-green)" }}
+          {/* Kolom Kanan — Sidebar */}
+          <div className="flex flex-col gap-5">
+            {/* Sholat Sunnah */}
+
+            <div
+              className="px-5 py-4 border-b"
+              style={{
+                borderColor: "#e5d9cc",
+                backgroundColor: "var(--masjid-cream-dark)",
+              }}
+            >
+              <p
+                className="font-bold text-sm"
+                style={{ color: "var(--masjid-green)" }}
+              >
+                🌟 Sholat Sunnah
+              </p>
+            </div>
+            <div className="p-5 flex flex-col gap-4">
+              {/* Dhuha */}
+              <div className="flex items-center justify-between">
+                <div>
+                  <p
+                    className="font-semibold text-sm"
+                    style={{ color: "var(--masjid-green)" }}
+                  >
+                    Dhuha
+                  </p>
+                  <p className="text-xs text-gray-400">
+                    Setelah matahari terbit
+                  </p>
+                </div>
+                <p
+                  className="font-mono font-bold text-lg"
+                  style={{ color: "var(--masjid-gold)" }}
+                >
+                  {jadwal ? hitungDhuha(jadwal.subuh) : "--:--"}
+                </p>
+              </div>
+
+              <div className="h-px" style={{ backgroundColor: "#e5d9cc" }} />
+
+              {/* Tahajud */}
+              <div className="flex items-center justify-between">
+                <div>
+                  <p
+                    className="font-semibold text-sm"
+                    style={{ color: "var(--masjid-green)" }}
+                  >
+                    Tahajud
+                  </p>
+                  <p className="text-xs text-gray-400">
+                    Sepertiga malam terakhir
+                  </p>
+                </div>
+                <p
+                  className="font-mono font-bold text-lg"
+                  style={{ color: "var(--masjid-gold)" }}
+                >
+                  {jadwal ? hitungTahajud(jadwal.isya, jadwal.subuh) : "--:--"}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Ayat Harian */}
+          <div
+            className="rounded-2xl overflow-hidden relative"
+            style={{ backgroundColor: "var(--masjid-green)" }}
           >
-            📍 Jadwal untuk wilayah Depok, Jawa Barat
-          </p>
-          <p className="text-xs mt-1 text-gray-400">
-            Sumber: MyQuran API • Diperbarui setiap hari
-          </p>
+            <div
+              className="absolute inset-0"
+              style={{
+                backgroundImage: arabesque,
+                backgroundSize: "80px 80px",
+              }}
+            />
+            <div className="relative p-5">
+              <p
+                className="text-xs font-semibold tracking-widest uppercase mb-4"
+                style={{ color: "var(--masjid-gold)" }}
+              >
+                ✨ Ayat Hari Ini
+              </p>
+              <p className="text-white/90 text-sm leading-relaxed italic mb-4">
+                "{ayatHari.ayat}"
+              </p>
+              <p
+                className="text-xs font-semibold"
+                style={{ color: "var(--masjid-gold)" }}
+              >
+                — {ayatHari.sumber}
+              </p>
+            </div>
+          </div>
+
+          {/* Tips Sholat */}
+          <div
+            className="rounded-2xl border p-5"
+            style={{ backgroundColor: "white", borderColor: "#e5d9cc" }}
+          >
+            <p
+              className="font-bold text-sm mb-3"
+              style={{ color: "var(--masjid-green)" }}
+            >
+              💡 Tips Ibadah
+            </p>
+            <ul className="flex flex-col gap-2 text-xs text-gray-500">
+              <li className="flex items-start gap-2">
+                <span style={{ color: "var(--masjid-gold)" }}>•</span>
+                <span>
+                  Sholat di awal waktu adalah amalan yang paling dicintai Allah.
+                </span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span style={{ color: "var(--masjid-gold)" }}>•</span>
+                <span>Jaga wudhu agar selalu siap sholat tepat waktu.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span style={{ color: "var(--masjid-gold)" }}>•</span>
+                <span>Sholat berjamaah pahalanya 27 derajat lebih tinggi.</span>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
