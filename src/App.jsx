@@ -7,20 +7,26 @@ import Kegiatan from "./pages/Kegiatan";
 import Donasi from "./pages/Donasi";
 import ImamJumat from "./pages/ImamJumat";
 import Struktural from "./pages/Struktural";
+import { PengumumanBanner } from "./components/Pengumuman";
+import Zakat from "./pages/Zakat";
 
 function App() {
   return (
     <BrowserRouter>
       <Navbar />
       <main className="min-h-screen">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/jadwal" element={<Jadwal />} />
-          <Route path="/kegiatan" element={<Kegiatan />} />
-          <Route path="/donasi" element={<Donasi />} />
-          <Route path="/imam-jumat" element={<ImamJumat />} />
-          <Route path="/struktural" element={<Struktural />} />
-        </Routes>
+        <PengumumanBanner />
+        <main className="min-h-screen">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/jadwal" element={<Jadwal />} />
+            <Route path="/kegiatan" element={<Kegiatan />} />
+            <Route path="/donasi" element={<Donasi />} />
+            <Route path="/imam-jumat" element={<ImamJumat />} />
+            <Route path="/struktural" element={<Struktural />} />
+            <Route path="/zakat" element={<Zakat />} />
+          </Routes>
+        </main>
       </main>
       <Footer />
     </BrowserRouter>

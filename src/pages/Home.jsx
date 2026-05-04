@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import { PengumumanSection } from "../components/Pengumuman";
 
 const SEJARAH_URL =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vSqDUgS8Tuq3wMTHILWCz9uKHw8CVVH4bxQO_vMextZpZ7qF3axv04PxBKW2VSPk8naN8iWGs9qvlGF/pub?gid=0&single=true&output=csv";
@@ -362,6 +363,8 @@ function Home() {
           ))}
         </div>
       </section>
+      {/* Pengumuman */}
+      <PengumumanSection />
 
       {/* Profil & Sejarah */}
       <section

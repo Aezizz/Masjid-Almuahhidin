@@ -17,6 +17,7 @@ function Navbar() {
     { label: "Jadwal Sholat", to: "/jadwal" },
     { label: "Kegiatan", to: "/kegiatan" },
     { label: "Imam Jumat", to: "/imam-jumat" },
+    { label: "Zakat", to: "/zakat" },
     { label: "Struktural", to: "/struktural" },
   ];
 

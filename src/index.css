@@ -10,8 +10,18 @@
   --masjid-gold-1: #ffd700;
 }
 
+[data-theme="dark"] {
+  --masjid-cream: #0f1f17;
+  --masjid-cream-dark: #162b1f;
+  --card-bg: #1a2e22;
+  --card-border: #2a4a35;
+  --text-primary: #e8f5ee;
+  --text-secondary: #9dc4ad;
+}
+
 body {
   background-color: var(--masjid-cream);
+  transition: background-color 0.3s ease;
 }
 
 @keyframes borderRotate {
