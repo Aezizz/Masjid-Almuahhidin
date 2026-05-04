@@ -23,7 +23,7 @@ function Footer() {
             <span className="text-3xl">🕌</span>
             <div>
               <p className="font-bold text-lg leading-tight">
-                Masjid Al-Muahhidin
+                Masjid Al-Muwahhidin
               </p>
               <p className="text-xs" style={{ color: "var(--masjid-gold)" }}>
                 Depok, Jawa Barat
@@ -74,7 +74,12 @@ function Footer() {
           <ul className="flex flex-col gap-3 text-sm text-white/60">
             <li className="flex items-start gap-2">
               <span>📍</span>
-              <span>Jl. Nama Jalan, Pancoran Mas, Depok, Jawa Barat</span>
+              <a
+                href="https://maps.app.goo.gl/i16waPgcCfvBx9Ys6"
+                target="_blank"
+              >
+                <span>Jeruk Raya, Pancoran Mas, Depok, Jawa Barat</span>
+              </a>
             </li>
             <li className="flex items-center gap-2">
               <span>📞</span>
@@ -92,7 +97,7 @@ function Footer() {
       <div className="relative border-t border-white/10">
         <div className="max-w-6xl mx-auto px-6 py-5 flex flex-col md:flex-row items-center justify-between gap-2">
           <p className="text-white/40 text-xs">
-            © {new Date().getFullYear()} Masjid Al-Muahhidin. All rights
+            © {new Date().getFullYear()} Masjid Al-Muwahhidin. All rights
             reserved.
           </p>
           <p className="text-white/40 text-xs">

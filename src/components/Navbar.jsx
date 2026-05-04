@@ -34,7 +34,7 @@ function Navbar() {
           <span className="text-xl">🕌</span>
           <div>
             <p className="font-bold text-sm text-white leading-tight">
-              Al-Muahhidin
+              Al-Muwahhidin
             </p>
             <p className="text-xs" style={{ color: "var(--masjid-gold)" }}>
               Depok, Jawa Barat

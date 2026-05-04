@@ -43,44 +43,21 @@ const tipeStyle = {
 };
 
 export function PengumumanBanner() {
-  const [data, setData] = useState([]);
-  const [aktif, setAktif] = useState(0);
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    // Cek session storage — kalau udah ditutup di sesi ini, jangan muncul lagi
     const sudahDitutup = sessionStorage.getItem("pengumuman_ditutup");
-    if (sudahDitutup) return;
-
-    fetch(PENGUMUMAN_URL)
-      .then((res) => res.text())
-      .then((text) => {
-        const parsed = parseCSV(text);
-        setData(parsed);
-        if (parsed.length > 0) {
-          setTimeout(() => setVisible(true), 1000);
-        }
-      })
-      .catch(() => {});
+    if (!sudahDitutup) {
+      setTimeout(() => setVisible(true), 1000);
+    }
   }, []);
-
-  useEffect(() => {
-    if (data.length <= 1) return;
-    const interval = setInterval(() => {
-      setAktif((p) => (p + 1) % data.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [data]);
 
   function tutup() {
     sessionStorage.setItem("pengumuman_ditutup", "true");
     setVisible(false);
   }
 
-  if (!visible || data.length === 0) return null;
-
-  const item = data[aktif];
-  const style = tipeStyle[item.tipe] || tipeStyle.info;
+  if (!visible) return null;
 
   return (
     <div
@@ -113,7 +90,7 @@ export function PengumumanBanner() {
               <span className="text-xl">🕌</span>
               <div>
                 <p className="font-bold text-sm">Masjid Al-Muahhidin</p>
-                <p className="text-xs text-white/60">Pengumuman</p>
+                <p className="text-xs text-white/60">Pemberitahuan</p>
               </div>
             </div>
             <button
@@ -126,64 +103,22 @@ export function PengumumanBanner() {
         </div>
 
         {/* Konten */}
-        <div className="p-6">
-          <span
-            className="text-xs font-bold px-3 py-1 rounded-full mb-4 inline-block"
-            style={{ backgroundColor: style.badge.bg, color: style.badge.text }}
-          >
-            {style.icon} {style.label}
-          </span>
+        <div className="p-6 text-center">
+          <p className="text-4xl mb-4">🚧</p>
           <h3
-            className="text-xl font-bold mb-2 mt-2"
+            className="text-xl font-bold mb-2"
             style={{ color: "var(--masjid-green)" }}
           >
-            {item.judul}
+            Website Sedang Dikembangkan
           </h3>
-          <p className="text-sm text-gray-600 leading-relaxed mb-4">
-            {item.isi}
+          <p className="text-sm text-gray-500 leading-relaxed mb-4">
+            Website Masjid Al-Muahhidin saat ini masih dalam tahap pengembangan.
+            Beberapa fitur mungkin belum sempurna atau masih dalam proses
+            penyesuaian.
           </p>
-          <p className="text-xs text-gray-400">📅 {item.tanggal}</p>
-
-          {/* Navigasi dots + arrow kalau lebih dari 1 */}
-          {data.length > 1 && (
-            <div className="flex items-center justify-between mt-5">
-              <button
-                onClick={() =>
-                  setAktif((p) => (p - 1 + data.length) % data.length)
-                }
-                className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-lg transition-all hover:scale-110"
-                style={{
-                  backgroundColor: "var(--masjid-cream-dark)",
-                  color: "var(--masjid-green)",
-                }}
-              >
-                ‹
-              </button>
-              <div className="flex gap-2">
-                {data.map((_, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setAktif(i)}
-                    className="w-2 h-2 rounded-full transition-all"
-                    style={{
-                      backgroundColor:
-                        i === aktif ? "var(--masjid-green)" : "#d1d5db",
-                    }}
-                  />
-                ))}
-              </div>
-              <button
-                onClick={() => setAktif((p) => (p + 1) % data.length)}
-                className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-lg transition-all hover:scale-110"
-                style={{
-                  backgroundColor: "var(--masjid-cream-dark)",
-                  color: "var(--masjid-green)",
-                }}
-              >
-                ›
-              </button>
-            </div>
-          )}
+          <p className="text-xs text-gray-400">
+            Terima kasih atas kesabaran dan dukungan Anda. 🙏
+          </p>
         </div>
 
         {/* Footer */}

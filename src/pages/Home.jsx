@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import { PengumumanSection } from "../components/Pengumuman";
 
 const SEJARAH_URL =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vSqDUgS8Tuq3wMTHILWCz9uKHw8CVVH4bxQO_vMextZpZ7qF3axv04PxBKW2VSPk8naN8iWGs9qvlGF/pub?gid=0&single=true&output=csv";
@@ -254,7 +253,7 @@ function Home() {
           <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
             Masjid
             <br />
-            <span style={{ color: "var(--masjid-gold)" }}>Al-Muahhidin</span>
+            <span style={{ color: "var(--masjid-gold)" }}>Al-Muwahhidin</span>
           </h1>
           <div
             className="w-16 h-px mx-auto"
@@ -364,7 +363,6 @@ function Home() {
         </div>
       </section>
       {/* Pengumuman */}
-      <PengumumanSection />
 
       {/* Profil & Sejarah */}
       <section
@@ -406,7 +404,7 @@ function Home() {
                   <div className="text-center">
                     <p className="text-6xl mb-3">🕌</p>
                     <p className="text-sm text-gray-400">
-                      Foto Masjid Al-Muahhidin
+                      Foto Masjid Al-Muwahhidin
                     </p>
                   </div>
                 )}
@@ -463,7 +461,7 @@ function Home() {
                   Sejarah Berdirinya Masjid
                 </h3>
                 <p className="text-gray-500 leading-relaxed text-sm">
-                  Masjid Al-Muahhidin berdiri atas inisiatif para tokoh
+                  Masjid Al-Muwahhidin berdiri atas inisiatif para tokoh
                   masyarakat dan warga sekitar yang memiliki keinginan kuat
                   untuk menyediakan tempat ibadah yang layak bagi umat Islam di
                   wilayah Pancoran Mas, Depok. Dengan semangat gotong royong dan
@@ -480,7 +478,7 @@ function Home() {
                   Perkembangan & Pembangunan
                 </h3>
                 <p className="text-gray-500 leading-relaxed text-sm">
-                  Seiring berjalannya waktu, Masjid Al-Muahhidin terus
+                  Seiring berjalannya waktu, Masjid Al-Muwahhidin terus
                   berkembang. Berbagai renovasi dan perluasan dilakukan untuk
                   menampung jumlah jamaah yang terus bertambah. Hingga saat ini,
                   masjid terus berbenah diri untuk menjadi pusat ibadah dan
@@ -544,7 +542,7 @@ function Home() {
               Semua yang Jamaah Butuhkan
             </h2>
             <p className="mt-3 max-w-xl mx-auto text-gray-500">
-              Masjid Al-Muahhidin hadir dengan berbagai layanan untuk mendukung
+              Masjid Al-Muwahhidin hadir dengan berbagai layanan untuk mendukung
               ibadah dan kegiatan jamaah.
             </p>
           </div>
@@ -619,7 +617,7 @@ function Home() {
           </h2>
           <p className="text-white/70 mb-8">
             Setiap donasi Anda akan digunakan secara transparan untuk
-            pembangunan dan operasional Masjid Al-Muahhidin.
+            pembangunan dan operasional Masjid Al-Muwahhidin.
           </p>
           <Link
             to="/donasi"

@@ -11,7 +11,7 @@ const kegiatanList = [
     nama: "Kajian Subuh",
     hari: "Setiap Ahad",
     waktu: "05:30 - 06:30",
-    tempat: "Masjid Al-Muahhidin",
+    tempat: "Masjid Al-Muwahhidin",
     deskripsi: "Kajian rutin ba'da subuh bersama ustadz.",
     icon: "📖",
     kategori: "Kajian",
@@ -21,7 +21,7 @@ const kegiatanList = [
     nama: "Pengajian Anak & Remaja",
     hari: "Setiap Senin & Rabu",
     waktu: "16:00 - 17:30",
-    tempat: "Masjid Al-Muahhidin",
+    tempat: "Masjid Al-Muwahhidin",
     deskripsi: "Belajar Al-Quran dan akhlak untuk anak-anak dan remaja.",
     icon: "🧒",
     kategori: "Pendidikan",
@@ -31,7 +31,7 @@ const kegiatanList = [
     nama: "Majelis Taklim Ibu-Ibu",
     hari: "Setiap Jumat",
     waktu: "09:00 - 11:00",
-    tempat: "Masjid Al-Muahhidin",
+    tempat: "Masjid Al-Muwahhidin",
     deskripsi: "Pengajian rutin ibu-ibu jamaah masjid.",
     icon: "👩",
     kategori: "Kajian",
@@ -41,7 +41,7 @@ const kegiatanList = [
     nama: "Sholat Jumat Berjamaah",
     hari: "Setiap Jumat",
     waktu: "11:45 - 13:00",
-    tempat: "Masjid Al-Muahhidin",
+    tempat: "Masjid Al-Muwahhidin",
     deskripsi: "Sholat Jumat berjamaah dengan khutbah.",
     icon: "🕌",
     kategori: "Ibadah",
@@ -233,7 +233,7 @@ function Kegiatan() {
             className="text-xs font-semibold tracking-widest uppercase mb-3"
             style={{ color: "var(--masjid-gold)" }}
           >
-            Masjid Al-Muahhidin
+            Masjid Al-Muwahhidin
           </p>
           <h1 className="text-4xl font-bold mb-2">Kegiatan Masjid</h1>
           <p className="text-white/70 text-sm">

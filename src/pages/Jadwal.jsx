@@ -332,7 +332,7 @@ function Jadwal() {
             className="text-xs font-semibold tracking-widest uppercase mb-3"
             style={{ color: "var(--masjid-gold)" }}
           >
-            Masjid Al-Muahhidin — Depok
+            Masjid Al-Muwahhidin — Depok
           </p>
           <h1 className="text-4xl font-bold mb-2">Jadwal Sholat</h1>
           <p className="text-white/70 text-sm">{tanggal}</p>
@@ -401,7 +401,7 @@ function Jadwal() {
                     const waktuList = WAKTU_SHOLAT.map(
                       (w) => `${w.label}: ${jadwal[w.key]}`,
                     ).join("\n");
-                    const pesan = `🕌 *Jadwal Sholat Masjid Al-Muahhidin*\n📅 ${tanggal}\n\n${waktuList}\n\n📍 Depok, Jawa Barat\n_Dibagikan dari website Masjid Al-Muahhidin_`;
+                    const pesan = `🕌 *Jadwal Sholat Masjid Al-Muahhidin*\n📅 ${tanggal}\n\n${waktuList}\n\n📍 Depok, Jawa Barat\n_Dibagikan dari website Masjid Al-Muwahhidin_`;
                     window.open(
                       `https://wa.me/?text=${encodeURIComponent(pesan)}`,
                       "_blank",
