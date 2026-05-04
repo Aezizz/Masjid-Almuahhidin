@@ -7,8 +7,8 @@ import Kegiatan from "./pages/Kegiatan";
 import Donasi from "./pages/Donasi";
 import ImamJumat from "./pages/ImamJumat";
 import Struktural from "./pages/Struktural";
-import { PengumumanBanner } from "./components/Pengumuman";
 import Zakat from "./pages/Zakat";
+import { PengumumanBanner } from "./components/Pengumuman";
 
 function App() {
   return (
@@ -16,17 +16,15 @@ function App() {
       <Navbar />
       <main className="min-h-screen">
         <PengumumanBanner />
-        <main className="min-h-screen">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/jadwal" element={<Jadwal />} />
-            <Route path="/kegiatan" element={<Kegiatan />} />
-            <Route path="/donasi" element={<Donasi />} />
-            <Route path="/imam-jumat" element={<ImamJumat />} />
-            <Route path="/struktural" element={<Struktural />} />
-            <Route path="/zakat" element={<Zakat />} />
-          </Routes>
-        </main>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/jadwal" element={<Jadwal />} />
+          <Route path="/kegiatan" element={<Kegiatan />} />
+          <Route path="/donasi" element={<Donasi />} />
+          <Route path="/imam-jumat" element={<ImamJumat />} />
+          <Route path="/struktural" element={<Struktural />} />
+          <Route path="/zakat" element={<Zakat />} />
+        </Routes>
       </main>
       <Footer />
     </BrowserRouter>
