@@ -9,9 +9,9 @@ const rekeningList = [
   {
     bank: "Bank Syariah Indonesia (BSI)",
     noRek: "1234567890",
-    atasNama: "Masjid Al-Muahhidin",
+    atasNama: "Masjid Al-Muwahhidin",
   },
-  { bank: "Bank BRI", noRek: "0987654321", atasNama: "Masjid Al-Muahhidin" },
+  { bank: "Bank BRI", noRek: "0987654321", atasNama: "Masjid Al-Muwahhidin" },
 ];
 
 const nominalCepat = [10000, 25000, 50000, 100000, 250000, 500000];
@@ -323,7 +323,7 @@ function Donasi() {
             className="text-xs font-semibold tracking-widest uppercase mb-3"
             style={{ color: "var(--masjid-gold)" }}
           >
-            Masjid Al-Muahhidin
+            Masjid Al-Muwahhidin
           </p>
           <h1 className="text-4xl font-bold mb-2">Donasi & Infaq</h1>
           <p className="text-white/70 text-sm">

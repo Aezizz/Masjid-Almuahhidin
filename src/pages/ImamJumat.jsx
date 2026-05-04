@@ -142,11 +142,11 @@ function ImamJumat() {
             className="text-xs font-semibold tracking-widest uppercase mb-3"
             style={{ color: "var(--masjid-gold)" }}
           >
-            Masjid Al-Muahhidin
+            Masjid Al-Muwahhidin
           </p>
           <h1 className="text-4xl font-bold mb-2">Jadwal Imam & Penceramah</h1>
           <p className="text-white/70 text-sm">
-            Jadwal Sholat Jumat Masjid Al-Muahhidin
+            Jadwal Sholat Jumat Masjid Al-Muwahhidin
           </p>
         </div>
       </div>

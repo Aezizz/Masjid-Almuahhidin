@@ -47,11 +47,11 @@ function Struktural() {
             className="text-xs font-semibold tracking-widest uppercase mb-3"
             style={{ color: "var(--masjid-gold)" }}
           >
-            Masjid Al-Muahhidin
+            Masjid Al-Muwahhidin
           </p>
           <h1 className="text-4xl font-bold mb-2">Struktural Masjid</h1>
           <p className="text-white/70 text-sm">
-            Pengurus & Divisi Masjid Al-Muahhidin
+            Pengurus & Divisi Masjid Al-Muwahhidin
           </p>
         </div>
       </div>

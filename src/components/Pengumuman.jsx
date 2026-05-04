@@ -89,7 +89,7 @@ export function PengumumanBanner() {
             <div className="flex items-center gap-2">
               <span className="text-xl">🕌</span>
               <div>
-                <p className="font-bold text-sm">Masjid Al-Muahhidin</p>
+                <p className="font-bold text-sm">Masjid Al-Muwahhidin</p>
                 <p className="text-xs text-white/60">Pemberitahuan</p>
               </div>
             </div>
@@ -112,9 +112,9 @@ export function PengumumanBanner() {
             Website Sedang Dikembangkan
           </h3>
           <p className="text-sm text-gray-500 leading-relaxed mb-4">
-            Website Masjid Al-Muahhidin saat ini masih dalam tahap pengembangan.
-            Beberapa fitur mungkin belum sempurna atau masih dalam proses
-            penyesuaian.
+            Website Masjid Al-Muwahhidin saat ini masih dalam tahap
+            pengembangan. Beberapa fitur mungkin belum sempurna atau masih dalam
+            proses penyesuaian.
           </p>
           <p className="text-xs text-gray-400">
             Terima kasih atas kesabaran dan dukungan Anda. 🙏

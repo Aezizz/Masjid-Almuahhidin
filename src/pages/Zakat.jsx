@@ -513,7 +513,7 @@ function Zakat() {
             className="text-xs font-semibold tracking-widest uppercase mb-3"
             style={{ color: "var(--masjid-gold)" }}
           >
-            Masjid Al-Muahhidin
+            Masjid Al-Muwahhidin
           </p>
           <h1 className="text-4xl font-bold mb-2">Kalkulator Zakat</h1>
           <p className="text-white/70 text-sm">
@@ -588,7 +588,7 @@ function Zakat() {
             Sudah hitung zakat? Tunaikan sekarang! 🤲
           </p>
           <p className="text-xs text-gray-500 mb-3">
-            Salurkan zakat Anda melalui Masjid Al-Muahhidin
+            Salurkan zakat Anda melalui Masjid Al-Muwahhidin
           </p>
           <a
             href="/donasi"
