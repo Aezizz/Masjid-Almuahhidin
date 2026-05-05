@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 const SHEETS_URL =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vRbvc5UFLbApaLKDUIPltm8Enh4H4UvqiTYk_s6AOWoYXcIb1Fjxpvb-BKwUfPVFbpwbaxnkJd1E5bn/pub?gid=0&single=true&output=csv";
@@ -62,7 +64,10 @@ function LaporanKeuangan({ laporan, loading, error }) {
   return (
     <div className="flex flex-col gap-4">
       {!lihatSemua && (
-        <div className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
+        <div
+          className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden"
+          data-aos="fade-up"
+        >
           <div className="px-6 py-4 border-b border-gray-100">
             <h3 className="font-bold text-gray-800">5 Transaksi Terbaru</h3>
             <p className="text-gray-400 text-xs mt-0.5">
@@ -266,6 +271,9 @@ function Donasi() {
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
+    AOS.init({ duration: 700, once: true, easing: "ease-out-cubic" });
+  }, []);
+  useEffect(() => {
     fetch(SHEETS_URL)
       .then((res) => res.text())
       .then((text) => {
@@ -387,7 +395,10 @@ function Donasi() {
             <div className={step === 1 ? "lg:col-span-2" : ""}>
               {/* Step 1 — Form */}
               {step === 1 && (
-                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                <div
+                  className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6"
+                  data-aos="fade-up"
+                >
                   <h2
                     className="font-bold text-lg mb-6"
                     style={{ color: "var(--masjid-green)" }}

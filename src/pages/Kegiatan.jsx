@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 const DOCS_URL =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vSsdFggl3w1ZuW4hcKsv0bZcF6ZjR30a9pbLXzGcPrlSGbNkr4pareH6xcKBOixxWshWZfBXPn9nIu2/pub?gid=0&single=true&output=csv";
@@ -192,7 +194,6 @@ function Kegiatan() {
       .then((res) => res.text())
       .then((text) => {
         const parsed = parseCSV(text);
-        // Group by kegiatan
         const grouped = {};
         parsed.forEach((item) => {
           if (!grouped[item.kegiatan]) grouped[item.kegiatan] = [];
@@ -202,6 +203,10 @@ function Kegiatan() {
         setLoadingDocs(false);
       })
       .catch(() => setLoadingDocs(false));
+  }, []);
+
+  useEffect(() => {
+    AOS.init({ duration: 700, once: true, easing: "ease-out-cubic" });
   }, []);
 
   return (
@@ -249,6 +254,8 @@ function Kegiatan() {
             return (
               <div
                 key={kegiatan.id}
+                data-aos="fade-up"
+                data-aos-delay={kegiatan.id * 100}
                 className="rounded-2xl p-6 hover:shadow-md hover:-translate-y-1 transition-all border"
                 style={{ backgroundColor: "white", borderColor: "#e5d9cc" }}
                 onMouseEnter={(e) =>
@@ -341,6 +348,7 @@ function Kegiatan() {
         {/* Banner */}
         <div
           className="mt-10 rounded-2xl p-8 text-center text-white relative overflow-hidden"
+          data-aos="fade-up"
           style={{ backgroundColor: "var(--masjid-green)" }}
         >
           <div

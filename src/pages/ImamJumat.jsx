@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 const SHEETS_URL =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vRPzziWYcG7rNySVh2Xg32kgMonogpC5QZNJOuFJhZTHG1cqjzrsUzoqWjTXudwsxEYb9Mf3Ri2iNj0/pub?gid=0&single=true&output=csv";
@@ -54,7 +56,6 @@ function filterData(data) {
   return data.filter((item) => {
     const tgl = parseTanggal(item.tanggal);
     if (!tgl) return false;
-    // Tampilkan hanya yang tidak lebih dari sebulan yang lalu
     return tgl >= sebulanLalu;
   });
 }
@@ -62,14 +63,83 @@ function filterData(data) {
 function getMingguIni(data) {
   const now = new Date();
   now.setHours(0, 0, 0, 0);
-  // Cari yang paling dekat (hari ini atau ke depan)
   const mendatang = data.filter((item) => {
     const tgl = parseTanggal(item.tanggal);
     return tgl && tgl >= now;
   });
   if (mendatang.length > 0) return mendatang[0];
-  // Kalau semua sudah lewat, ambil yang paling terakhir
   return data[data.length - 1];
+}
+
+function SkeletonCard() {
+  return (
+    <div
+      className="rounded-2xl p-8 relative overflow-hidden"
+      style={{ backgroundColor: "var(--masjid-green)" }}
+    >
+      <div className="flex flex-col md:flex-row items-center gap-6">
+        <div
+          className="w-24 h-24 rounded-full animate-pulse"
+          style={{ backgroundColor: "rgba(255,255,255,0.15)" }}
+        />
+        <div className="flex-1 w-full flex flex-col gap-3">
+          <div
+            className="h-3 rounded-full w-24 animate-pulse"
+            style={{ backgroundColor: "rgba(255,255,255,0.2)" }}
+          />
+          <div
+            className="h-6 rounded-full w-48 animate-pulse"
+            style={{ backgroundColor: "rgba(255,255,255,0.25)" }}
+          />
+          <div
+            className="h-3 rounded-full w-32 animate-pulse"
+            style={{ backgroundColor: "rgba(255,255,255,0.15)" }}
+          />
+          <div
+            className="h-8 rounded-full w-56 animate-pulse mt-1"
+            style={{ backgroundColor: "rgba(255,255,255,0.1)" }}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SkeletonList() {
+  return (
+    <div className="flex flex-col gap-4">
+      {[1, 2, 3].map((i) => (
+        <div
+          key={i}
+          className="rounded-2xl p-5 border flex items-center gap-5"
+          style={{ backgroundColor: "white", borderColor: "#e5d9cc" }}
+        >
+          <div
+            className="w-14 h-14 rounded-full animate-pulse flex-shrink-0"
+            style={{ backgroundColor: "var(--masjid-cream-dark)" }}
+          />
+          <div className="flex-1 flex flex-col gap-2">
+            <div
+              className="h-4 rounded-full w-40 animate-pulse"
+              style={{ backgroundColor: "var(--masjid-cream-dark)" }}
+            />
+            <div
+              className="h-3 rounded-full w-24 animate-pulse"
+              style={{ backgroundColor: "var(--masjid-cream-dark)" }}
+            />
+            <div
+              className="h-3 rounded-full w-52 animate-pulse"
+              style={{ backgroundColor: "var(--masjid-cream-dark)" }}
+            />
+          </div>
+          <div
+            className="h-3 rounded-full w-20 animate-pulse flex-shrink-0"
+            style={{ backgroundColor: "var(--masjid-cream-dark)" }}
+          />
+        </div>
+      ))}
+    </div>
+  );
 }
 
 function AvatarDefault({ nama }) {
@@ -95,12 +165,15 @@ function ImamJumat() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    AOS.init({ duration: 700, once: true, easing: "ease-out-cubic" });
+  }, []);
+
+  useEffect(() => {
     fetch(SHEETS_URL)
       .then((res) => res.text())
       .then((text) => {
         const parsed = parseCSV(text);
         const filtered = filterData(parsed);
-        // Urutkan dari terdekat ke terjauh
         filtered.sort((a, b) => {
           const tglA = parseTanggal(a.tanggal);
           const tglB = parseTanggal(b.tanggal);
@@ -117,7 +190,6 @@ function ImamJumat() {
 
   const mingguIni = getMingguIni(data);
 
-  // Jadwal lengkap = semua KECUALI yang minggu ini
   const jadwalLainnya = data.filter(
     (item) => item.tanggal !== mingguIni?.tanggal,
   );
@@ -127,7 +199,6 @@ function ImamJumat() {
       className="min-h-screen"
       style={{ backgroundColor: "var(--masjid-cream)" }}
     >
-      {/* Header */}
       <div
         className="relative overflow-hidden pt-28 pb-16 px-4 text-center text-white"
         style={{ backgroundColor: "var(--masjid-green)" }}
@@ -152,18 +223,32 @@ function ImamJumat() {
       </div>
 
       <div className="max-w-4xl mx-auto px-4 -mt-6 pt-8 pb-16">
+        {error && <div className="text-center text-red-400 py-20">{error}</div>}
+
         {loading && (
-          <div className="text-center text-gray-400 py-20">
-            Memuat jadwal...
+          <div className="flex flex-col gap-6">
+            <div>
+              <div
+                className="h-3 rounded-full w-32 animate-pulse mb-4"
+                style={{ backgroundColor: "var(--masjid-cream-dark)" }}
+              />
+              <SkeletonCard />
+            </div>
+            <div>
+              <div
+                className="h-3 rounded-full w-28 animate-pulse mb-4"
+                style={{ backgroundColor: "var(--masjid-cream-dark)" }}
+              />
+              <SkeletonList />
+            </div>
           </div>
         )}
-        {error && <div className="text-center text-red-400 py-20">{error}</div>}
 
         {!loading && !error && (
           <>
             {/* Card Jumat Terdekat */}
             {mingguIni && (
-              <div className="mb-8">
+              <div className="mb-8" data-aos="fade-up">
                 <p
                   className="text-xs font-semibold tracking-widest uppercase mb-4"
                   style={{ color: "var(--masjid-gold)" }}
@@ -215,7 +300,6 @@ function ImamJumat() {
               </div>
             )}
 
-            {/* Jadwal Lengkap — tanpa minggu ini */}
             {jadwalLainnya.length > 0 && (
               <>
                 <p
@@ -226,7 +310,6 @@ function ImamJumat() {
                 </p>
 
                 <div className="relative">
-                  {/* Fade atas */}
                   <div
                     className="absolute top-0 left-0 right-0 h-8 z-10 pointer-events-none rounded-t-2xl"
                     style={{
@@ -235,7 +318,6 @@ function ImamJumat() {
                     }}
                   />
 
-                  {/* Scroll Area */}
                   <div
                     className="flex flex-col gap-4 max-h-[500px] overflow-y-auto pr-2"
                     style={{
@@ -247,6 +329,8 @@ function ImamJumat() {
                     {jadwalLainnya.map((item, i) => (
                       <div
                         key={i}
+                        data-aos="fade-up"
+                        data-aos-delay={i * 80}
                         className="rounded-2xl p-5 border flex items-center gap-5 transition-all duration-300 hover:-translate-y-1"
                         style={{
                           backgroundColor: "white",
@@ -260,7 +344,6 @@ function ImamJumat() {
                           (e.currentTarget.style.boxShadow = "none")
                         }
                       >
-                        {/* Avatar */}
                         <div className="flex-shrink-0">
                           {item.foto ? (
                             <img
@@ -286,7 +369,6 @@ function ImamJumat() {
                           )}
                         </div>
 
-                        {/* Info */}
                         <div className="flex-1">
                           <p
                             className="font-bold"
@@ -305,7 +387,6 @@ function ImamJumat() {
                           </p>
                         </div>
 
-                        {/* Tanggal */}
                         <div className="text-right flex-shrink-0">
                           <p
                             className="text-xs font-medium"
@@ -318,7 +399,6 @@ function ImamJumat() {
                     ))}
                   </div>
 
-                  {/* Fade bawah */}
                   <div
                     className="absolute bottom-0 left-0 right-0 h-8 z-10 pointer-events-none rounded-b-2xl"
                     style={{
@@ -330,7 +410,6 @@ function ImamJumat() {
               </>
             )}
 
-            {/* Kalau semua data kosong */}
             {data.length === 0 && (
               <div className="text-center py-12 text-gray-400">
                 <p className="text-4xl mb-3">📭</p>
