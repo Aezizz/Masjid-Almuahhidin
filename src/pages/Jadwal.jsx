@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 const KOTA_ID = "1219";
 
@@ -215,21 +217,25 @@ function WaktuCard({ waktu, jadwal, isBerikutnya, index }) {
   const displayWaktu = useCountUp(jadwal?.[waktu.key], 800, index * 150 + 300);
   return (
     <div
-      className={`fade-in-up flex items-center justify-between px-6 py-5 rounded-2xl transition-all ${isBerikutnya ? "card-border-animated" : ""}`}
+      className={`fade-in-up flex items-center justify-between px-5 py-4 rounded-2xl transition-all duration-300 ease-in-out ${isBerikutnya ? "card-border-animated" : "hover:shadow-md"}`}
       style={{
         animationDelay: `${index * 150}ms`,
         ...(isBerikutnya
-          ? { backgroundColor: "var(--masjid-green)", transform: "scale(1.02)" }
+          ? {
+              backgroundColor: "var(--masjid-green)",
+              transform: "scale(1.02)",
+              boxShadow: "0 8px 32px rgba(26,61,43,0.25)",
+            }
           : {
               backgroundColor: "white",
               border: "1px solid #e5d9cc",
-              outline: "1.5px solid #1a1a1a",
+              outline: "1px solid rgba(26,61,43,0.12)",
             }),
       }}
     >
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3">
         <div
-          className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl"
+          className="w-11 h-11 rounded-xl flex items-center justify-center text-xl flex-shrink-0"
           style={{
             backgroundColor: isBerikutnya
               ? "rgba(255,255,255,0.15)"
@@ -240,7 +246,7 @@ function WaktuCard({ waktu, jadwal, isBerikutnya, index }) {
         </div>
         <div>
           <p
-            className="font-bold text-lg"
+            className="font-bold text-base"
             style={{ color: isBerikutnya ? "white" : "var(--masjid-green)" }}
           >
             {waktu.label}
@@ -256,7 +262,7 @@ function WaktuCard({ waktu, jadwal, isBerikutnya, index }) {
         </div>
       </div>
       <p
-        className="text-2xl font-mono font-bold"
+        className="text-xl sm:text-2xl font-mono font-bold flex-shrink-0"
         style={{
           color: isBerikutnya ? "var(--masjid-gold)" : "var(--masjid-green)",
         }}
@@ -275,6 +281,12 @@ function Jadwal() {
   const [countdown, setCountdown] = useState("");
 
   useEffect(() => {
+    AOS.init({
+      duration: 800,
+      once: true,
+      easing: "ease-out-cubic",
+      offset: 80,
+    });
     const now = new Date();
     setTanggal(
       now.toLocaleDateString("id-ID", {
@@ -319,14 +331,14 @@ function Jadwal() {
     >
       {/* Header */}
       <div
-        className="relative overflow-hidden pt-28 pb-16 px-4 text-center text-white"
+        className="relative overflow-hidden pt-28 pb-16 px-6 text-center text-white"
         style={{ backgroundColor: "var(--masjid-green)" }}
       >
         <div
           className="absolute inset-0"
           style={{ backgroundImage: arabesque, backgroundSize: "80px 80px" }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/30" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/40" />
         <div className="relative">
           <p
             className="text-xs font-semibold tracking-widest uppercase mb-3"
@@ -334,11 +346,11 @@ function Jadwal() {
           >
             Masjid Al-Muwahhidin — Depok
           </p>
-          <h1 className="text-4xl font-bold mb-2">Jadwal Sholat</h1>
+          <h1 className="text-3xl sm:text-4xl font-bold mb-2">Jadwal Sholat</h1>
           <p className="text-white/70 text-sm">{tanggal}</p>
           {countdown && (
             <div
-              className="mt-4 inline-block backdrop-blur px-5 py-2 rounded-full text-sm border border-white/20"
+              className="mt-4 inline-block backdrop-blur-md px-5 py-2 rounded-full text-sm border border-white/20"
               style={{ backgroundColor: "rgba(255,255,255,0.1)" }}
             >
               ⏳ {countdown}
@@ -347,13 +359,13 @@ function Jadwal() {
         </div>
       </div>
 
-      {/* Content - 2 Kolom */}
-      <div className="max-w-5xl mx-auto px-4 -mt-6 pt-8 pb-16">
+      {/* Content */}
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 -mt-6 pt-8 pb-16">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Kolom Kiri — Jadwal Utama */}
           <div className="lg:col-span-2">
             {loading && (
-              <div className="text-center text-gray-400 py-20">
+              <div className="text-center text-slate-400 py-20">
                 Memuat jadwal sholat...
               </div>
             )}
@@ -376,7 +388,8 @@ function Jadwal() {
 
             {/* Info + Share */}
             <div
-              className="mt-6 rounded-2xl p-5 border"
+              className="mt-5 rounded-2xl p-5 border"
+              data-aos="fade-up"
               style={{
                 backgroundColor: "var(--masjid-cream-dark)",
                 borderColor: "#e5d9cc",
@@ -389,12 +402,10 @@ function Jadwal() {
                 >
                   📍 Jadwal untuk wilayah Depok, Jawa Barat
                 </p>
-                <p className="text-xs mt-1 text-gray-400">
+                <p className="text-xs mt-1 text-slate-400">
                   Sumber: MyQuran API • Diperbarui setiap hari
                 </p>
               </div>
-
-              {/* Tombol Share */}
               {jadwal && (
                 <button
                   onClick={() => {
@@ -407,12 +418,12 @@ function Jadwal() {
                       "_blank",
                     );
                   }}
-                  className="w-full py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all hover:opacity-90"
+                  className="w-full h-11 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all duration-300 hover:opacity-90 hover:shadow-md"
                   style={{ backgroundColor: "#25D366", color: "white" }}
                 >
                   <svg
-                    width="18"
-                    height="18"
+                    width="16"
+                    height="16"
                     viewBox="0 0 24 24"
                     fill="currentColor"
                   >
@@ -425,128 +436,144 @@ function Jadwal() {
           </div>
 
           {/* Kolom Kanan — Sidebar */}
-          <div className="flex flex-col gap-5">
+          <div className="flex flex-col gap-4">
             {/* Sholat Sunnah */}
-
             <div
-              className="px-5 py-4 border-b"
+              className="rounded-2xl border overflow-hidden"
+              data-aos="fade-left"
               style={{
-                borderColor: "#e5d9cc",
-                backgroundColor: "var(--masjid-cream-dark)",
+                backgroundColor: "rgba(255,255,255,0.5)",
+                backdropFilter: "blur(12px)",
+                WebkitBackdropFilter: "blur(12px)",
+                borderColor: "rgba(255,255,255,0.3)",
+              }}
+            >
+              <div
+                className="px-5 py-3 border-b"
+                style={{
+                  borderColor: "#e5d9cc",
+                  backgroundColor: "var(--masjid-cream-dark)",
+                }}
+              >
+                <p
+                  className="font-bold text-sm"
+                  style={{ color: "var(--masjid-green)" }}
+                >
+                  🌟 Sholat Sunnah
+                </p>
+              </div>
+              <div className="p-5 flex flex-col gap-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p
+                      className="font-semibold text-sm"
+                      style={{ color: "var(--masjid-green)" }}
+                    >
+                      Dhuha
+                    </p>
+                    <p className="text-xs text-slate-400">
+                      Setelah matahari terbit
+                    </p>
+                  </div>
+                  <p
+                    className="font-mono font-bold text-lg"
+                    style={{ color: "var(--masjid-gold)" }}
+                  >
+                    {jadwal ? hitungDhuha(jadwal.subuh) : "--:--"}
+                  </p>
+                </div>
+                <div className="h-px" style={{ backgroundColor: "#e5d9cc" }} />
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p
+                      className="font-semibold text-sm"
+                      style={{ color: "var(--masjid-green)" }}
+                    >
+                      Tahajud
+                    </p>
+                    <p className="text-xs text-slate-400">
+                      Sepertiga malam terakhir
+                    </p>
+                  </div>
+                  <p
+                    className="font-mono font-bold text-lg"
+                    style={{ color: "var(--masjid-gold)" }}
+                  >
+                    {jadwal
+                      ? hitungTahajud(jadwal.isya, jadwal.subuh)
+                      : "--:--"}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Ayat Harian */}
+            <div
+              className="rounded-2xl overflow-hidden relative"
+              data-aos="fade-left"
+              data-aos-delay="100"
+              style={{ backgroundColor: "var(--masjid-green)" }}
+            >
+              <div
+                className="absolute inset-0"
+                style={{
+                  backgroundImage: arabesque,
+                  backgroundSize: "80px 80px",
+                }}
+              />
+              <div className="relative p-5">
+                <p
+                  className="text-xs font-semibold tracking-widest uppercase mb-4"
+                  style={{ color: "var(--masjid-gold)" }}
+                >
+                  ✨ Ayat Hari Ini
+                </p>
+                <p className="text-white/90 text-sm leading-relaxed italic mb-4">
+                  "{ayatHari.ayat}"
+                </p>
+                <p
+                  className="text-xs font-semibold"
+                  style={{ color: "var(--masjid-gold)" }}
+                >
+                  — {ayatHari.sumber}
+                </p>
+              </div>
+            </div>
+
+            {/* Tips Ibadah */}
+            <div
+              className="rounded-2xl border p-5"
+              data-aos="fade-left"
+              data-aos-delay="200"
+              style={{
+                backgroundColor: "rgba(255,255,255,0.5)",
+                backdropFilter: "blur(12px)",
+                WebkitBackdropFilter: "blur(12px)",
+                borderColor: "rgba(255,255,255,0.3)",
               }}
             >
               <p
-                className="font-bold text-sm"
+                className="font-bold text-sm mb-3"
                 style={{ color: "var(--masjid-green)" }}
               >
-                🌟 Sholat Sunnah
+                💡 Tips Ibadah
               </p>
-            </div>
-            <div className="p-5 flex flex-col gap-4">
-              {/* Dhuha */}
-              <div className="flex items-center justify-between">
-                <div>
-                  <p
-                    className="font-semibold text-sm"
-                    style={{ color: "var(--masjid-green)" }}
+              <ul className="flex flex-col gap-2">
+                {[
+                  "Sholat di awal waktu adalah amalan yang paling dicintai Allah.",
+                  "Jaga wudhu agar selalu siap sholat tepat waktu.",
+                  "Sholat berjamaah pahalanya 27 derajat lebih tinggi.",
+                ].map((tip, i) => (
+                  <li
+                    key={i}
+                    className="flex items-start gap-2 text-xs text-slate-500"
                   >
-                    Dhuha
-                  </p>
-                  <p className="text-xs text-gray-400">
-                    Setelah matahari terbit
-                  </p>
-                </div>
-                <p
-                  className="font-mono font-bold text-lg"
-                  style={{ color: "var(--masjid-gold)" }}
-                >
-                  {jadwal ? hitungDhuha(jadwal.subuh) : "--:--"}
-                </p>
-              </div>
-
-              <div className="h-px" style={{ backgroundColor: "#e5d9cc" }} />
-
-              {/* Tahajud */}
-              <div className="flex items-center justify-between">
-                <div>
-                  <p
-                    className="font-semibold text-sm"
-                    style={{ color: "var(--masjid-green)" }}
-                  >
-                    Tahajud
-                  </p>
-                  <p className="text-xs text-gray-400">
-                    Sepertiga malam terakhir
-                  </p>
-                </div>
-                <p
-                  className="font-mono font-bold text-lg"
-                  style={{ color: "var(--masjid-gold)" }}
-                >
-                  {jadwal ? hitungTahajud(jadwal.isya, jadwal.subuh) : "--:--"}
-                </p>
-              </div>
+                    <span style={{ color: "var(--masjid-gold)" }}>•</span>
+                    <span>{tip}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
-          </div>
-
-          {/* Ayat Harian */}
-          <div
-            className="rounded-2xl overflow-hidden relative"
-            style={{ backgroundColor: "var(--masjid-green)" }}
-          >
-            <div
-              className="absolute inset-0"
-              style={{
-                backgroundImage: arabesque,
-                backgroundSize: "80px 80px",
-              }}
-            />
-            <div className="relative p-5">
-              <p
-                className="text-xs font-semibold tracking-widest uppercase mb-4"
-                style={{ color: "var(--masjid-gold)" }}
-              >
-                ✨ Ayat Hari Ini
-              </p>
-              <p className="text-white/90 text-sm leading-relaxed italic mb-4">
-                "{ayatHari.ayat}"
-              </p>
-              <p
-                className="text-xs font-semibold"
-                style={{ color: "var(--masjid-gold)" }}
-              >
-                — {ayatHari.sumber}
-              </p>
-            </div>
-          </div>
-
-          {/* Tips Sholat */}
-          <div
-            className="rounded-2xl border p-5"
-            style={{ backgroundColor: "white", borderColor: "#e5d9cc" }}
-          >
-            <p
-              className="font-bold text-sm mb-3"
-              style={{ color: "var(--masjid-green)" }}
-            >
-              💡 Tips Ibadah
-            </p>
-            <ul className="flex flex-col gap-2 text-xs text-gray-500">
-              <li className="flex items-start gap-2">
-                <span style={{ color: "var(--masjid-gold)" }}>•</span>
-                <span>
-                  Sholat di awal waktu adalah amalan yang paling dicintai Allah.
-                </span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span style={{ color: "var(--masjid-gold)" }}>•</span>
-                <span>Jaga wudhu agar selalu siap sholat tepat waktu.</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span style={{ color: "var(--masjid-gold)" }}>•</span>
-                <span>Sholat berjamaah pahalanya 27 derajat lebih tinggi.</span>
-              </li>
-            </ul>
           </div>
         </div>
       </div>

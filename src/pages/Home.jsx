@@ -77,7 +77,6 @@ function ModalSejarah({ galeri, onClose }) {
         style={{ backgroundColor: "var(--masjid-green)" }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
           <div>
             <p className="font-bold text-white">Dokumentasi Sejarah Masjid</p>
@@ -87,13 +86,11 @@ function ModalSejarah({ galeri, onClose }) {
           </div>
           <button
             onClick={onClose}
-            className="text-white/60 hover:text-white text-2xl transition-colors"
+            className="text-white/60 hover:text-white text-2xl transition-all duration-300"
           >
             ✕
           </button>
         </div>
-
-        {/* Foto */}
         <div className="relative aspect-video bg-black flex items-center justify-center overflow-hidden">
           <img
             src={galeri[aktif]?.foto}
@@ -106,14 +103,14 @@ function ModalSejarah({ galeri, onClose }) {
                 onClick={() =>
                   setAktif((p) => (p - 1 + galeri.length) % galeri.length)
                 }
-                className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-xl hover:scale-110 transition-all"
+                className="absolute left-3 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-xl transition-all duration-300 hover:scale-110"
                 style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
               >
                 ‹
               </button>
               <button
                 onClick={() => setAktif((p) => (p + 1) % galeri.length)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-xl hover:scale-110 transition-all"
+                className="absolute right-3 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-xl transition-all duration-300 hover:scale-110"
                 style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
               >
                 ›
@@ -121,20 +118,16 @@ function ModalSejarah({ galeri, onClose }) {
             </>
           )}
         </div>
-
-        {/* Keterangan */}
         <div className="px-6 py-3 border-t border-white/10">
           <p className="text-white/70 text-sm">{galeri[aktif]?.keterangan}</p>
         </div>
-
-        {/* Thumbnail */}
         {galeri.length > 1 && (
           <div className="flex gap-2 px-6 pb-5 overflow-x-auto">
             {galeri.map((item, i) => (
               <button
                 key={i}
                 onClick={() => setAktif(i)}
-                className="flex-shrink-0 w-16 h-16 rounded-xl overflow-hidden border-2 transition-all"
+                className="flex-shrink-0 w-16 h-16 rounded-xl overflow-hidden border-2 transition-all duration-300"
                 style={{
                   borderColor:
                     i === aktif ? "var(--masjid-gold)" : "transparent",
@@ -201,7 +194,12 @@ function Home() {
   const [modalSejarahOpen, setModalSejarahOpen] = useState(false);
 
   useEffect(() => {
-    AOS.init({ duration: 700, once: true, easing: "ease-out-cubic" });
+    AOS.init({
+      duration: 800,
+      once: true,
+      easing: "ease-out-cubic",
+      offset: 80,
+    });
   }, []);
 
   const jamString = jam.toLocaleTimeString("id-ID", {
@@ -220,7 +218,6 @@ function Home() {
 
   return (
     <div>
-      {/* Modal Sejarah */}
       {modalSejarahOpen && (
         <ModalSejarah
           galeri={galeri}
@@ -228,7 +225,7 @@ function Home() {
         />
       )}
 
-      {/* Hero */}
+      {/* ── HERO ── */}
       <section
         className="relative min-h-screen flex items-center justify-center overflow-hidden"
         style={{ backgroundColor: "var(--masjid-green)" }}
@@ -242,33 +239,40 @@ function Home() {
             willChange: "transform",
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/40" />
-        <div className="relative text-center text-white px-4 max-w-4xl mx-auto">
+        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/50" />
+
+        <div className="relative text-center text-white px-6 max-w-4xl mx-auto">
           <p
-            className="text-sm font-semibold tracking-[0.3em] uppercase mb-6"
+            className="text-xs font-semibold tracking-[0.3em] uppercase mb-5"
             style={{ color: "var(--masjid-gold)" }}
           >
             Selamat Datang di
           </p>
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+
+          <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold mb-5 leading-tight">
             Masjid
             <br />
             <span style={{ color: "var(--masjid-gold)" }}>Al-Muwahhidin</span>
           </h1>
+
+          {/* Divider */}
           <div
-            className="w-16 h-px mx-auto"
+            className="w-12 h-px mx-auto mb-6"
             style={{ backgroundColor: "rgba(201,168,76,0.4)" }}
           />
+
+          {/* Jam Realtime */}
           <div
-            className="mt-6 mb-10 border rounded-2xl px-8 py-4 inline-block"
+            className="mb-8 border rounded-2xl px-6 sm:px-10 py-4 inline-block"
             style={{
               borderColor: "rgba(201,168,76,0.3)",
-              backgroundColor: "rgba(0,0,0,0.2)",
+              backgroundColor: "rgba(0,0,0,0.25)",
+              backdropFilter: "blur(8px)",
             }}
           >
             <div className="flex items-end justify-center gap-1">
               <p
-                className="font-mono font-bold tracking-widest text-5xl md:text-5xl"
+                className="font-mono font-bold tracking-widest text-4xl sm:text-5xl"
                 style={{
                   color: "var(--masjid-gold)",
                   textShadow:
@@ -278,7 +282,7 @@ function Home() {
                 {jamString.slice(0, 5)}
               </p>
               <p
-                className="font-mono font-light tracking-widest text-xl md:text-2xl mb-1"
+                className="font-mono font-light tracking-widest text-xl sm:text-2xl mb-1"
                 style={{
                   color: "rgba(201,168,76,0.6)",
                   textShadow: "0 0 20px rgba(201,168,76,0.3)",
@@ -291,14 +295,17 @@ function Home() {
               {hariString}
             </p>
           </div>
-          <p className="text-white/80 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
+
+          <p className="text-white/75 text-base sm:text-lg max-w-xl mx-auto mb-10 leading-relaxed px-2">
             Memakmurkan masjid, mempererat ukhuwah islamiyah. Bersama kita
             bangun rumah Allah yang bermartabat.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+
+          {/* CTA Buttons — min h-12 untuk mobile */}
+          <div className="flex flex-col sm:flex-row gap-3 justify-center px-4 sm:px-0">
             <Link
               to="/donasi"
-              className="font-bold px-8 py-4 rounded-full transition-all hover:scale-105 shadow-lg"
+              className="h-12 flex items-center justify-center font-bold px-8 rounded-full transition-all duration-300 ease-in-out hover:scale-105 shadow-lg"
               style={{
                 backgroundColor: "var(--masjid-gold)",
                 color: "var(--masjid-green)",
@@ -308,27 +315,33 @@ function Home() {
             </Link>
             <Link
               to="/jadwal"
-              className="border-2 text-white font-bold px-8 py-4 rounded-full hover:bg-white/10 transition-all"
+              className="h-12 flex items-center justify-center border-2 text-white font-bold px-8 rounded-full transition-all duration-300 ease-in-out hover:bg-white/10"
               style={{ borderColor: "var(--masjid-gold)" }}
             >
               🕐 Jadwal Sholat
             </Link>
           </div>
         </div>
+
+        {/* Scroll indicator */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/30 text-xs flex flex-col items-center gap-2">
+          <span className="tracking-widest uppercase text-[10px]">Scroll</span>
+          <div className="w-px h-8 bg-white/20" />
+        </div>
       </section>
 
-      {/* Stats */}
+      {/* ── STATS ── */}
       <section
         style={{ backgroundColor: "var(--masjid-cream)" }}
         className="border-b border-stone-200"
       >
-        <div className="max-w-6xl mx-auto px-6 py-12 grid grid-cols-2 md:grid-cols-4 gap-5">
+        <div className="max-w-6xl mx-auto px-6 py-12 grid grid-cols-2 md:grid-cols-4 gap-4">
           {stats.map((stat, i) => (
             <div
               key={i}
               data-aos="fade-up"
               data-aos-delay={i * 100}
-              className="group relative rounded-2xl p-6 text-center cursor-default overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-xl border"
+              className="group relative rounded-2xl p-5 text-center cursor-default overflow-hidden transition-all duration-300 ease-in-out hover:-translate-y-2 hover:shadow-xl border"
               style={{
                 backgroundColor: "white",
                 borderColor: "#e5d9cc",
@@ -349,12 +362,12 @@ function Home() {
               />
               <div className="relative z-10">
                 <p
-                  className="text-4xl font-bold mb-1 transition-colors duration-300"
+                  className="text-3xl sm:text-4xl font-bold mb-1 transition-colors duration-300"
                   style={{ color: "inherit" }}
                 >
                   {stat.angka}
                 </p>
-                <p className="text-sm transition-colors duration-300 opacity-70">
+                <p className="text-xs sm:text-sm transition-colors duration-300 opacity-70">
                   {stat.label}
                 </p>
               </div>
@@ -362,17 +375,16 @@ function Home() {
           ))}
         </div>
       </section>
-      {/* Pengumuman */}
 
-      {/* Profil & Sejarah */}
+      {/* ── PROFIL & SEJARAH ── */}
       <section
-        className="py-20 px-4"
+        className="py-20 px-6"
         style={{ backgroundColor: "var(--masjid-cream)" }}
       >
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12" data-aos="fade-up">
             <p
-              className="text-sm font-semibold tracking-widest uppercase mb-3"
+              className="text-xs font-semibold tracking-widest uppercase mb-3"
               style={{ color: "var(--masjid-gold)" }}
             >
               Tentang Kami
@@ -384,11 +396,12 @@ function Home() {
               Profil & Sejarah Masjid
             </h2>
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            {/* Kiri */}
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
+            {/* Kiri — Foto */}
             <div data-aos="fade-right">
               <div
-                className="rounded-2xl overflow-hidden border aspect-video flex items-center justify-center relative"
+                className="rounded-2xl overflow-hidden border aspect-video flex items-center justify-center relative shadow-lg"
                 style={{
                   backgroundColor: "var(--masjid-cream-dark)",
                   borderColor: "#e5d9cc",
@@ -416,17 +429,16 @@ function Home() {
                 </div>
               </div>
 
-              {/* Tombol Galeri */}
-              <div
+              <button
                 onClick={() => setModalSejarahOpen(true)}
-                className="w-full mt-3 py-3 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 cursor-pointer transition-all hover:opacity-90"
+                className="w-full mt-3 h-12 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-all duration-300 ease-in-out hover:opacity-85 hover:shadow-md"
                 style={{
                   backgroundColor: "var(--masjid-green)",
                   color: "white",
                 }}
               >
                 📷 Lihat Dokumentasi Jadul ({galeri.length} foto)
-              </div>
+              </button>
 
               <div className="grid grid-cols-2 gap-3 mt-4">
                 {[
@@ -435,7 +447,7 @@ function Home() {
                 ].map((item, i) => (
                   <div
                     key={i}
-                    className="rounded-xl p-4 border text-center"
+                    className="rounded-xl p-4 border text-center transition-all duration-300 hover:shadow-md"
                     style={{ backgroundColor: "white", borderColor: "#e5d9cc" }}
                   >
                     <p className="text-2xl mb-1">{item.icon}</p>
@@ -451,57 +463,43 @@ function Home() {
               </div>
             </div>
 
-            {/* Kanan */}
+            {/* Kanan — Narasi */}
             <div className="flex flex-col gap-6" data-aos="fade-left">
-              <div>
-                <h3
-                  className="text-xl font-bold mb-3"
-                  style={{ color: "var(--masjid-green)" }}
-                >
-                  Sejarah Berdirinya Masjid
-                </h3>
-                <p className="text-gray-500 leading-relaxed text-sm">
-                  Masjid Al-Muwahhidin berdiri atas inisiatif para tokoh
-                  masyarakat dan warga sekitar yang memiliki keinginan kuat
-                  untuk menyediakan tempat ibadah yang layak bagi umat Islam di
-                  wilayah Pancoran Mas, Depok. Dengan semangat gotong royong dan
-                  kebersamaan, masjid ini dibangun dari nol oleh tangan-tangan
-                  ikhlas para jamaah.
-                </p>
-              </div>
-              <div className="h-px" style={{ backgroundColor: "#e5d9cc" }} />
-              <div>
-                <h3
-                  className="text-xl font-bold mb-3"
-                  style={{ color: "var(--masjid-green)" }}
-                >
-                  Perkembangan & Pembangunan
-                </h3>
-                <p className="text-gray-500 leading-relaxed text-sm">
-                  Seiring berjalannya waktu, Masjid Al-Muwahhidin terus
-                  berkembang. Berbagai renovasi dan perluasan dilakukan untuk
-                  menampung jumlah jamaah yang terus bertambah. Hingga saat ini,
-                  masjid terus berbenah diri untuk menjadi pusat ibadah dan
-                  kegiatan islami yang lebih baik bagi seluruh warga.
-                </p>
-              </div>
-              <div className="h-px" style={{ backgroundColor: "#e5d9cc" }} />
-              <div>
-                <h3
-                  className="text-xl font-bold mb-3"
-                  style={{ color: "var(--masjid-green)" }}
-                >
-                  Visi & Misi
-                </h3>
-                <p className="text-gray-500 leading-relaxed text-sm">
-                  Mewujudkan masjid sebagai pusat ibadah, pendidikan, dan
-                  pemberdayaan umat yang bermartabat. Dengan semangat ukhuwah
-                  islamiyah, kami berkomitmen untuk terus memakmurkan masjid
-                  demi kemaslahatan seluruh jamaah.
-                </p>
-              </div>
+              {[
+                {
+                  judul: "Sejarah Berdirinya Masjid",
+                  isi: "Masjid Al-Muwahhidin berdiri atas inisiatif para tokoh masyarakat dan warga sekitar yang memiliki keinginan kuat untuk menyediakan tempat ibadah yang layak bagi umat Islam di wilayah Pancoran Mas, Depok. Dengan semangat gotong royong dan kebersamaan, masjid ini dibangun dari nol oleh tangan-tangan ikhlas para jamaah.",
+                },
+                {
+                  judul: "Perkembangan & Pembangunan",
+                  isi: "Seiring berjalannya waktu, Masjid Al-Muwahhidin terus berkembang. Berbagai renovasi dan perluasan dilakukan untuk menampung jumlah jamaah yang terus bertambah. Hingga saat ini, masjid terus berbenah diri untuk menjadi pusat ibadah dan kegiatan islami yang lebih baik bagi seluruh warga.",
+                },
+                {
+                  judul: "Visi & Misi",
+                  isi: "Mewujudkan masjid sebagai pusat ibadah, pendidikan, dan pemberdayaan umat yang bermartabat. Dengan semangat ukhuwah islamiyah, kami berkomitmen untuk terus memakmurkan masjid demi kemaslahatan seluruh jamaah.",
+                },
+              ].map((item, i) => (
+                <div key={i}>
+                  <h3
+                    className="text-lg font-bold mb-2"
+                    style={{ color: "var(--masjid-green)" }}
+                  >
+                    {item.judul}
+                  </h3>
+                  <p className="text-slate-600 leading-relaxed text-sm">
+                    {item.isi}
+                  </p>
+                  {i < 2 && (
+                    <div
+                      className="h-px mt-5"
+                      style={{ backgroundColor: "#e5d9cc" }}
+                    />
+                  )}
+                </div>
+              ))}
+
               <div
-                className="rounded-2xl p-5 border"
+                className="rounded-2xl p-5 border transition-all duration-300 hover:shadow-md"
                 style={{
                   backgroundColor: "var(--masjid-cream-dark)",
                   borderColor: "#e5d9cc",
@@ -513,8 +511,8 @@ function Home() {
                 >
                   📍 Lokasi Masjid
                 </p>
-                <p className="text-xs text-gray-500">
-                  Jl. Nama Jalan, Pancoran Mas, Depok, Jawa Barat
+                <p className="text-xs text-slate-500">
+                  Jl. Jeruk Raya, Pancoran Mas, Depok, Jawa Barat
                 </p>
               </div>
             </div>
@@ -522,15 +520,15 @@ function Home() {
         </div>
       </section>
 
-      {/* Layanan */}
+      {/* ── LAYANAN ── */}
       <section
-        className="py-20 px-4"
+        className="py-20 px-6"
         style={{ backgroundColor: "var(--masjid-cream-dark)" }}
       >
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12" data-aos="fade-up">
             <p
-              className="text-sm font-semibold tracking-widest uppercase mb-3"
+              className="text-xs font-semibold tracking-widest uppercase mb-3"
               style={{ color: "var(--masjid-gold)" }}
             >
               Layanan Kami
@@ -541,47 +539,48 @@ function Home() {
             >
               Semua yang Jamaah Butuhkan
             </h2>
-            <p className="mt-3 max-w-xl mx-auto text-gray-500">
+            <p className="mt-3 max-w-xl mx-auto text-slate-500 text-sm">
               Masjid Al-Muwahhidin hadir dengan berbagai layanan untuk mendukung
               ibadah dan kegiatan jamaah.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {layanan.map((item, i) => (
               <Link
                 key={i}
                 to={item.to}
                 data-aos="fade-up"
                 data-aos-delay={i * 100}
-                className="rounded-2xl p-6 hover:-translate-y-1 transition-all group"
+                className="rounded-2xl p-6 transition-all duration-300 ease-in-out hover:-translate-y-1 group"
                 style={{
-                  backgroundColor: "rgba(255,255,255,0.6)",
+                  backgroundColor: "rgba(255,255,255,0.65)",
                   backdropFilter: "blur(12px)",
                   WebkitBackdropFilter: "blur(12px)",
                   border: "1px solid rgba(255,255,255,0.4)",
-                  boxShadow: "0 4px 24px rgba(26,61,43,0.08)",
+                  boxShadow: "0 4px 24px rgba(26,61,43,0.07)",
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.backgroundColor =
-                    "rgba(255,255,255,0.8)";
+                    "rgba(255,255,255,0.85)";
                   e.currentTarget.style.boxShadow =
                     "0 0 0 2px var(--masjid-green), 0 8px 32px rgba(26,61,43,0.15)";
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.backgroundColor =
-                    "rgba(255,255,255,0.6)";
+                    "rgba(255,255,255,0.65)";
                   e.currentTarget.style.boxShadow =
-                    "0 4px 24px rgba(26,61,43,0.08)";
+                    "0 4px 24px rgba(26,61,43,0.07)";
                 }}
               >
-                <div className="text-4xl mb-4">{item.icon}</div>
+                <div className="text-3xl mb-4">{item.icon}</div>
                 <h3
-                  className="font-bold mb-2"
+                  className="font-bold mb-2 text-sm"
                   style={{ color: "var(--masjid-green)" }}
                 >
                   {item.judul}
                 </h3>
-                <p className="text-gray-500 text-sm leading-relaxed">
+                <p className="text-slate-500 text-xs leading-relaxed">
                   {item.deskripsi}
                 </p>
               </Link>
@@ -590,9 +589,9 @@ function Home() {
         </div>
       </section>
 
-      {/* CTA */}
+      {/* ── CTA ── */}
       <section
-        className="py-20 px-4 text-center text-white relative overflow-hidden"
+        className="py-20 px-6 text-center text-white relative overflow-hidden"
         style={{ backgroundColor: "var(--masjid-green)" }}
       >
         <div
@@ -607,21 +606,21 @@ function Home() {
         />
         <div className="relative max-w-2xl mx-auto" data-aos="fade-up">
           <p
-            className="text-sm font-semibold tracking-widest uppercase mb-4"
+            className="text-xs font-semibold tracking-widest uppercase mb-4"
             style={{ color: "var(--masjid-gold)" }}
           >
             Pembangunan Masjid
           </p>
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 leading-tight">
             Mari Bersama Memakmurkan Masjid
           </h2>
-          <p className="text-white/70 mb-8">
+          <p className="text-white/70 text-sm mb-8 leading-relaxed">
             Setiap donasi Anda akan digunakan secara transparan untuk
             pembangunan dan operasional Masjid Al-Muwahhidin.
           </p>
           <Link
             to="/donasi"
-            className="inline-block font-bold px-8 py-4 rounded-full transition-all hover:scale-105 shadow-lg"
+            className="inline-flex items-center h-12 font-bold px-8 rounded-full transition-all duration-300 ease-in-out hover:scale-105 shadow-lg"
             style={{
               backgroundColor: "var(--masjid-gold)",
               color: "var(--masjid-green)",
