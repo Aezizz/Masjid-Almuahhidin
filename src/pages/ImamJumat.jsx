@@ -52,11 +52,9 @@ function filterData(data) {
   now.setHours(0, 0, 0, 0);
   const sebulanLalu = new Date(now);
   sebulanLalu.setMonth(sebulanLalu.getMonth() - 1);
-
   return data.filter((item) => {
     const tgl = parseTanggal(item.tanggal);
-    if (!tgl) return false;
-    return tgl >= sebulanLalu;
+    return tgl && tgl >= sebulanLalu;
   });
 }
 
@@ -67,8 +65,7 @@ function getMingguIni(data) {
     const tgl = parseTanggal(item.tanggal);
     return tgl && tgl >= now;
   });
-  if (mendatang.length > 0) return mendatang[0];
-  return data[data.length - 1];
+  return mendatang.length > 0 ? mendatang[0] : data[data.length - 1];
 }
 
 function SkeletonCard() {
@@ -79,7 +76,7 @@ function SkeletonCard() {
     >
       <div className="flex flex-col md:flex-row items-center gap-6">
         <div
-          className="w-24 h-24 rounded-full animate-pulse"
+          className="w-24 h-24 rounded-full animate-pulse flex-shrink-0"
           style={{ backgroundColor: "rgba(255,255,255,0.15)" }}
         />
         <div className="flex-1 w-full flex flex-col gap-3">
@@ -142,16 +139,17 @@ function SkeletonList() {
   );
 }
 
-function AvatarDefault({ nama }) {
+function AvatarDefault({ nama, size = "lg" }) {
   const inisial =
     nama
       ?.split(" ")
       .map((n) => n[0])
       .slice(0, 2)
       .join("") || "?";
+  const cls = size === "lg" ? "w-20 h-20 text-xl" : "w-14 h-14 text-base";
   return (
     <div
-      className="w-20 h-20 rounded-full flex items-center justify-center text-xl font-bold text-white mx-auto"
+      className={`${cls} rounded-full flex items-center justify-center font-bold text-white mx-auto`}
       style={{ backgroundColor: "var(--masjid-green-light)" }}
     >
       {inisial}
@@ -165,20 +163,20 @@ function ImamJumat() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    AOS.init({ duration: 700, once: true, easing: "ease-out-cubic" });
-  }, []);
-
-  useEffect(() => {
+    AOS.init({
+      duration: 800,
+      once: true,
+      easing: "ease-out-cubic",
+      offset: 80,
+    });
     fetch(SHEETS_URL)
       .then((res) => res.text())
       .then((text) => {
         const parsed = parseCSV(text);
         const filtered = filterData(parsed);
-        filtered.sort((a, b) => {
-          const tglA = parseTanggal(a.tanggal);
-          const tglB = parseTanggal(b.tanggal);
-          return tglA - tglB;
-        });
+        filtered.sort(
+          (a, b) => parseTanggal(a.tanggal) - parseTanggal(b.tanggal),
+        );
         setData(filtered);
         setLoading(false);
       })
@@ -189,7 +187,6 @@ function ImamJumat() {
   }, []);
 
   const mingguIni = getMingguIni(data);
-
   const jadwalLainnya = data.filter(
     (item) => item.tanggal !== mingguIni?.tanggal,
   );
@@ -199,15 +196,16 @@ function ImamJumat() {
       className="min-h-screen"
       style={{ backgroundColor: "var(--masjid-cream)" }}
     >
+      {/* Header */}
       <div
-        className="relative overflow-hidden pt-28 pb-16 px-4 text-center text-white"
+        className="relative overflow-hidden pt-28 pb-16 px-6 text-center text-white"
         style={{ backgroundColor: "var(--masjid-green)" }}
       >
         <div
           className="absolute inset-0"
           style={{ backgroundImage: arabesque, backgroundSize: "80px 80px" }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/30" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/40" />
         <div className="relative">
           <p
             className="text-xs font-semibold tracking-widest uppercase mb-3"
@@ -215,14 +213,16 @@ function ImamJumat() {
           >
             Masjid Al-Muwahhidin
           </p>
-          <h1 className="text-4xl font-bold mb-2">Jadwal Imam & Penceramah</h1>
+          <h1 className="text-3xl sm:text-4xl font-bold mb-2">
+            Jadwal Imam & Penceramah
+          </h1>
           <p className="text-white/70 text-sm">
             Jadwal Sholat Jumat Masjid Al-Muwahhidin
           </p>
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 -mt-6 pt-8 pb-16">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 -mt-6 pt-8 pb-16">
         {error && <div className="text-center text-red-400 py-20">{error}</div>}
 
         {loading && (
@@ -246,7 +246,6 @@ function ImamJumat() {
 
         {!loading && !error && (
           <>
-            {/* Card Jumat Terdekat */}
             {mingguIni && (
               <div className="mb-8" data-aos="fade-up">
                 <p
@@ -256,7 +255,7 @@ function ImamJumat() {
                   ⭐ Jumat Terdekat
                 </p>
                 <div
-                  className="rounded-2xl p-8 text-white relative overflow-hidden"
+                  className="rounded-2xl p-6 sm:p-8 text-white relative overflow-hidden"
                   style={{ backgroundColor: "var(--masjid-green)" }}
                 >
                   <div
@@ -266,23 +265,23 @@ function ImamJumat() {
                       backgroundSize: "80px 80px",
                     }}
                   />
-                  <div className="relative flex flex-col md:flex-row items-center gap-6">
+                  <div className="relative flex flex-col sm:flex-row items-center gap-6">
                     <div className="flex-shrink-0">
                       {mingguIni.foto ? (
                         <img
                           src={mingguIni.foto}
                           alt={mingguIni.nama}
-                          className="w-24 h-24 rounded-full object-cover border-4 border-white/20 mx-auto"
+                          className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover border-4 border-white/20 mx-auto"
                         />
                       ) : (
                         <AvatarDefault nama={mingguIni.nama} />
                       )}
                     </div>
-                    <div className="text-center md:text-left flex-1">
+                    <div className="text-center sm:text-left flex-1">
                       <p className="text-white/60 text-xs mb-1">
                         📅 {mingguIni.tanggal}
                       </p>
-                      <h2 className="text-2xl font-bold mb-1">
+                      <h2 className="text-xl sm:text-2xl font-bold mb-1">
                         {mingguIni.nama}
                       </h2>
                       <p
@@ -291,7 +290,7 @@ function ImamJumat() {
                       >
                         {mingguIni.jabatan}
                       </p>
-                      <div className="inline-block bg-white/10 backdrop-blur px-4 py-2 rounded-full text-sm border border-white/20">
+                      <div className="inline-block bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full text-sm border border-white/20">
                         📖 {mingguIni.materi}
                       </div>
                     </div>
@@ -308,7 +307,6 @@ function ImamJumat() {
                 >
                   📅 Jadwal Lengkap
                 </p>
-
                 <div className="relative">
                   <div
                     className="absolute top-0 left-0 right-0 h-8 z-10 pointer-events-none rounded-t-2xl"
@@ -317,9 +315,8 @@ function ImamJumat() {
                         "linear-gradient(to bottom, var(--masjid-cream), transparent)",
                     }}
                   />
-
                   <div
-                    className="flex flex-col gap-4 max-h-[500px] overflow-y-auto pr-2"
+                    className="flex flex-col gap-3 max-h-[500px] overflow-y-auto pr-1"
                     style={{
                       scrollbarWidth: "thin",
                       scrollbarColor:
@@ -330,15 +327,15 @@ function ImamJumat() {
                       <div
                         key={i}
                         data-aos="fade-up"
-                        data-aos-delay={i * 80}
-                        className="rounded-2xl p-5 border flex items-center gap-5 transition-all duration-300 hover:-translate-y-1"
+                        data-aos-delay={Math.min(i * 80, 400)}
+                        className="rounded-2xl p-4 sm:p-5 border flex items-center gap-4 transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-md"
                         style={{
                           backgroundColor: "white",
                           borderColor: "#e5d9cc",
                         }}
                         onMouseEnter={(e) =>
                           (e.currentTarget.style.boxShadow =
-                            "0 0 0 2px var(--masjid-green)")
+                            "0 0 0 2px var(--masjid-green), 0 4px 20px rgba(26,61,43,0.1)")
                         }
                         onMouseLeave={(e) =>
                           (e.currentTarget.style.boxShadow = "none")
@@ -349,56 +346,39 @@ function ImamJumat() {
                             <img
                               src={item.foto}
                               alt={item.nama}
-                              className="w-14 h-14 rounded-full object-cover border-2"
+                              className="w-12 h-12 sm:w-14 sm:h-14 rounded-full object-cover border-2"
                               style={{ borderColor: "#e5d9cc" }}
                             />
                           ) : (
-                            <div
-                              className="w-14 h-14 rounded-full flex items-center justify-center text-lg font-bold"
-                              style={{
-                                backgroundColor: "var(--masjid-cream-dark)",
-                                color: "var(--masjid-green)",
-                              }}
-                            >
-                              {item.nama
-                                ?.split(" ")
-                                .map((n) => n[0])
-                                .slice(0, 2)
-                                .join("")}
-                            </div>
+                            <AvatarDefault nama={item.nama} size="sm" />
                           )}
                         </div>
-
-                        <div className="flex-1">
+                        <div className="flex-1 min-w-0">
                           <p
-                            className="font-bold"
+                            className="font-bold text-sm truncate"
                             style={{ color: "var(--masjid-green)" }}
                           >
                             {item.nama}
                           </p>
                           <p
-                            className="text-xs mb-1"
+                            className="text-xs mb-0.5"
                             style={{ color: "#9ca3af" }}
                           >
                             {item.jabatan}
                           </p>
-                          <p className="text-sm" style={{ color: "#6b7280" }}>
+                          <p className="text-xs text-slate-500 truncate">
                             📖 {item.materi}
                           </p>
                         </div>
-
-                        <div className="text-right flex-shrink-0">
-                          <p
-                            className="text-xs font-medium"
-                            style={{ color: "#9ca3af" }}
-                          >
-                            {item.tanggal}
-                          </p>
-                        </div>
+                        <p
+                          className="text-xs font-medium flex-shrink-0"
+                          style={{ color: "#9ca3af" }}
+                        >
+                          {item.tanggal}
+                        </p>
                       </div>
                     ))}
                   </div>
-
                   <div
                     className="absolute bottom-0 left-0 right-0 h-8 z-10 pointer-events-none rounded-b-2xl"
                     style={{
@@ -411,7 +391,7 @@ function ImamJumat() {
             )}
 
             {data.length === 0 && (
-              <div className="text-center py-12 text-gray-400">
+              <div className="text-center py-12 text-slate-400">
                 <p className="text-4xl mb-3">📭</p>
                 <p>Belum ada jadwal imam yang tersedia.</p>
               </div>

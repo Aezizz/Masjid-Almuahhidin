@@ -1,5 +1,3 @@
-import { Link } from "react-router-dom";
-
 function Footer() {
   return (
     <footer
@@ -17,29 +15,27 @@ function Footer() {
         }}
       />
 
-      <div className="relative max-w-6xl mx-auto px-6 py-16 grid grid-cols-1 lg:grid-cols-2 gap-12">
-        {/* Kolom Kiri — Brand + Kontak */}
-        <div className="flex flex-col gap-8">
-          {/* Brand */}
+      <div className="relative max-w-6xl mx-auto px-6 py-14 grid grid-cols-1 lg:grid-cols-2 gap-12">
+        {/* Kiri */}
+        <div className="flex flex-col gap-7">
           <div>
-            <div className="flex items-center gap-2 mb-4">
+            <div className="flex items-center gap-3 mb-4">
               <span className="text-3xl">🕌</span>
               <div>
                 <p className="font-bold text-lg leading-tight">
-                  Masjid Al-Muahhidin
+                  Masjid Al-Muwahhidin
                 </p>
                 <p className="text-xs" style={{ color: "var(--masjid-gold)" }}>
                   Depok, Jawa Barat
                 </p>
               </div>
             </div>
-            <p className="text-white/60 text-sm leading-relaxed">
+            <p className="text-white/55 text-sm leading-relaxed">
               Memakmurkan masjid, mempererat ukhuwah islamiyah. Bersama kita
               bangun rumah Allah yang bermartabat.
             </p>
           </div>
 
-          {/* Kontak */}
           <div>
             <h3
               className="font-bold text-xs uppercase tracking-widest mb-4"
@@ -47,7 +43,7 @@ function Footer() {
             >
               Kontak
             </h3>
-            <ul className="flex flex-col gap-3 text-sm text-white/60">
+            <ul className="flex flex-col gap-3 text-sm text-white/55">
               <li className="flex items-center gap-2">
                 <span>📞</span>
                 <span>08xx-xxxx-xxxx</span>
@@ -60,7 +56,7 @@ function Footer() {
           </div>
         </div>
 
-        {/* Kolom Kanan — Maps */}
+        {/* Kanan — Maps */}
         <div>
           <h3
             className="font-bold text-xs uppercase tracking-widest mb-4"
@@ -68,14 +64,12 @@ function Footer() {
           >
             📍 Lokasi Masjid
           </h3>
-
-          {/* Embed Maps dengan outline modern */}
           <div
-            className="rounded-2xl overflow-hidden"
+            className="rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-2xl"
             style={{
-              border: "2px solid rgba(201,168,76,0.4)",
+              border: "2px solid rgba(201,168,76,0.35)",
               boxShadow:
-                "0 0 0 1px rgba(201,168,76,0.15), 0 8px 32px rgba(0,0,0,0.3)",
+                "0 0 0 1px rgba(201,168,76,0.12), 0 8px 32px rgba(0,0,0,0.3)",
             }}
           >
             <iframe
@@ -86,24 +80,20 @@ function Footer() {
               allowFullScreen=""
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
-              title="Lokasi Masjid Al-Muahhidin"
+              title="Lokasi Masjid Al-Muwahhidin"
             />
           </div>
-
-          {/* Alamat */}
-          <p className="text-white/50 text-xs mt-3 flex items-start gap-1.5">
+          <p className="text-white/45 text-xs mt-3 flex items-start gap-1.5">
             <span>📍</span>
             <span>Jl. Jeruk Raya, Pancoran Mas, Depok, Jawa Barat</span>
           </p>
-
-          {/* Tombol buka di Maps */}
           <a
             href="https://maps.app.goo.gl/WtX74q6vJKQaDs6B7"
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-3 inline-flex items-center gap-2 text-xs font-semibold px-4 py-2 rounded-full transition-all hover:opacity-80"
+            className="mt-3 inline-flex items-center gap-2 text-xs font-semibold px-4 py-2 rounded-full transition-all duration-300 hover:opacity-75"
             style={{
-              border: "1px solid rgba(201,168,76,0.4)",
+              border: "1px solid rgba(201,168,76,0.35)",
               color: "var(--masjid-gold)",
             }}
           >
@@ -112,14 +102,13 @@ function Footer() {
         </div>
       </div>
 
-      {/* Bottom Bar */}
       <div className="relative border-t border-white/10">
-        <div className="max-w-6xl mx-auto px-6 py-5 flex flex-col md:flex-row items-center justify-between gap-2">
-          <p className="text-white/40 text-xs">
-            © {new Date().getFullYear()} Masjid Al-Muahhidin. All rights
+        <div className="max-w-6xl mx-auto px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+          <p className="text-white/35 text-xs">
+            © {new Date().getFullYear()} Masjid Al-Muwahhidin. All rights
             reserved.
           </p>
-          <p className="text-white/40 text-xs">
+          <p className="text-white/35 text-xs">
             Dibuat dengan ❤️ untuk kemakmuran umat
           </p>
         </div>

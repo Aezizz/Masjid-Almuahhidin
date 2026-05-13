@@ -70,10 +70,8 @@ function parseCSV(text) {
     .filter((item) => item.foto);
 }
 
-// Modal Carousel
 function ModalKarousel({ kegiatan, fotos, onClose }) {
   const [aktif, setAktif] = useState(0);
-
   useEffect(() => {
     const handleKey = (e) => {
       if (e.key === "Escape") onClose();
@@ -100,7 +98,6 @@ function ModalKarousel({ kegiatan, fotos, onClose }) {
         style={{ backgroundColor: "var(--masjid-green)" }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
           <div>
             <p className="font-bold text-white">{kegiatan}</p>
@@ -110,13 +107,11 @@ function ModalKarousel({ kegiatan, fotos, onClose }) {
           </div>
           <button
             onClick={onClose}
-            className="text-white/60 hover:text-white text-2xl transition-colors"
+            className="text-white/60 hover:text-white text-2xl transition-all duration-200"
           >
             ✕
           </button>
         </div>
-
-        {/* Foto Utama */}
         <div className="relative aspect-video bg-black flex items-center justify-center overflow-hidden">
           <img
             src={fotos[aktif].foto}
@@ -127,44 +122,37 @@ function ModalKarousel({ kegiatan, fotos, onClose }) {
               e.target.style.display = "none";
             }}
           />
-
-          {/* Tombol Prev */}
           {fotos.length > 1 && (
             <>
               <button
                 onClick={() =>
                   setAktif((p) => (p - 1 + fotos.length) % fotos.length)
                 }
-                className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center text-white font-bold transition-all hover:scale-110"
-                style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+                className="absolute left-3 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full flex items-center justify-center text-white font-bold text-xl transition-all duration-200 hover:scale-110"
+                style={{ backgroundColor: "rgba(0,0,0,0.55)" }}
               >
                 ‹
               </button>
-              {/* Tombol Next */}
               <button
                 onClick={() => setAktif((p) => (p + 1) % fotos.length)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center text-white font-bold transition-all hover:scale-110"
-                style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+                className="absolute right-3 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full flex items-center justify-center text-white font-bold text-xl transition-all duration-200 hover:scale-110"
+                style={{ backgroundColor: "rgba(0,0,0,0.55)" }}
               >
                 ›
               </button>
             </>
           )}
         </div>
-
-        {/* Keterangan */}
         <div className="px-6 py-3 border-t border-white/10">
           <p className="text-white/70 text-sm">{fotos[aktif].keterangan}</p>
         </div>
-
-        {/* Thumbnail */}
         {fotos.length > 1 && (
           <div className="flex gap-2 px-6 pb-5 overflow-x-auto">
             {fotos.map((item, i) => (
               <button
                 key={i}
                 onClick={() => setAktif(i)}
-                className="flex-shrink-0 w-16 h-16 rounded-xl overflow-hidden border-2 transition-all"
+                className="flex-shrink-0 w-16 h-16 rounded-xl overflow-hidden border-2 transition-all duration-200"
                 style={{
                   borderColor:
                     i === aktif ? "var(--masjid-gold)" : "transparent",
@@ -190,6 +178,12 @@ function Kegiatan() {
   const [loadingDocs, setLoadingDocs] = useState(true);
 
   useEffect(() => {
+    AOS.init({
+      duration: 800,
+      once: true,
+      easing: "ease-out-cubic",
+      offset: 80,
+    });
     fetch(DOCS_URL)
       .then((res) => res.text())
       .then((text) => {
@@ -205,16 +199,11 @@ function Kegiatan() {
       .catch(() => setLoadingDocs(false));
   }, []);
 
-  useEffect(() => {
-    AOS.init({ duration: 700, once: true, easing: "ease-out-cubic" });
-  }, []);
-
   return (
     <div
       className="min-h-screen"
       style={{ backgroundColor: "var(--masjid-cream)" }}
     >
-      {/* Modal */}
       {modalData && (
         <ModalKarousel
           kegiatan={modalData.nama}
@@ -225,14 +214,14 @@ function Kegiatan() {
 
       {/* Header */}
       <div
-        className="relative overflow-hidden pt-28 pb-16 px-4 text-center text-white"
+        className="relative overflow-hidden pt-28 pb-16 px-6 text-center text-white"
         style={{ backgroundColor: "var(--masjid-green)" }}
       >
         <div
           className="absolute inset-0"
           style={{ backgroundImage: arabesque, backgroundSize: "80px 80px" }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/30" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/40" />
         <div className="relative">
           <p
             className="text-xs font-semibold tracking-widest uppercase mb-3"
@@ -240,34 +229,35 @@ function Kegiatan() {
           >
             Masjid Al-Muwahhidin
           </p>
-          <h1 className="text-4xl font-bold mb-2">Kegiatan Masjid</h1>
+          <h1 className="text-3xl sm:text-4xl font-bold mb-2">
+            Kegiatan Masjid
+          </h1>
           <p className="text-white/70 text-sm">
             Jadwal kegiatan rutin untuk seluruh jamaah
           </p>
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 -mt-6 pt-8 pb-16">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 -mt-6 pt-8 pb-16">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {kegiatanList.map((kegiatan) => {
+          {kegiatanList.map((kegiatan, idx) => {
             const fotos = dokumentasi[kegiatan.nama] || [];
             return (
               <div
                 key={kegiatan.id}
                 data-aos="fade-up"
-                data-aos-delay={kegiatan.id * 100}
-                className="rounded-2xl p-6 hover:shadow-md hover:-translate-y-1 transition-all border"
+                data-aos-delay={idx * 100}
+                className="rounded-2xl p-6 border transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-lg"
                 style={{ backgroundColor: "white", borderColor: "#e5d9cc" }}
                 onMouseEnter={(e) =>
                   (e.currentTarget.style.boxShadow =
-                    "0 0 0 2px var(--masjid-green)")
+                    "0 0 0 2px var(--masjid-green), 0 8px 24px rgba(26,61,43,0.12)")
                 }
                 onMouseLeave={(e) => (e.currentTarget.style.boxShadow = "none")}
               >
-                {/* Top Row */}
                 <div className="flex items-start justify-between mb-4">
                   <div
-                    className="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl"
+                    className="w-13 h-13 w-12 h-12 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0"
                     style={{ backgroundColor: "var(--masjid-cream-dark)" }}
                   >
                     {kegiatan.icon}
@@ -284,17 +274,17 @@ function Kegiatan() {
                 </div>
 
                 <h2
-                  className="font-bold text-lg mb-1"
+                  className="font-bold text-base mb-1"
                   style={{ color: "var(--masjid-green)" }}
                 >
                   {kegiatan.nama}
                 </h2>
-                <p className="text-gray-500 text-sm mb-4">
+                <p className="text-slate-500 text-sm mb-4">
                   {kegiatan.deskripsi}
                 </p>
 
                 <div
-                  className="border-t pt-4 flex flex-col gap-2 mb-4"
+                  className="border-t pt-3 flex flex-col gap-1.5 mb-4"
                   style={{ borderColor: "#e5d9cc" }}
                 >
                   {[
@@ -304,7 +294,7 @@ function Kegiatan() {
                   ].map((item, i) => (
                     <div
                       key={i}
-                      className="flex items-center gap-2 text-sm text-gray-500"
+                      className="flex items-center gap-2 text-xs text-slate-500"
                     >
                       <span>{item.icon}</span>
                       <span>{item.text}</span>
@@ -312,13 +302,12 @@ function Kegiatan() {
                   ))}
                 </div>
 
-                {/* Tombol Dokumentasi */}
                 <button
                   onClick={() =>
                     fotos.length > 0 &&
                     setModalData({ nama: kegiatan.nama, fotos })
                   }
-                  className="w-full py-2.5 rounded-xl text-sm font-semibold transition-all flex items-center justify-center gap-2"
+                  className="w-full h-10 rounded-xl text-sm font-semibold transition-all duration-300 flex items-center justify-center gap-2"
                   style={
                     fotos.length > 0
                       ? {
@@ -345,7 +334,6 @@ function Kegiatan() {
           })}
         </div>
 
-        {/* Banner */}
         <div
           className="mt-10 rounded-2xl p-8 text-center text-white relative overflow-hidden"
           data-aos="fade-up"

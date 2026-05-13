@@ -7,16 +7,7 @@
   --masjid-cream: #f8f4ef;
   --masjid-cream-dark: #f0e9e0;
   --masjid-gold: #c9a84c;
-  --masjid-gold-1: #ffd700;
-}
-
-[data-theme="dark"] {
-  --masjid-cream: #0f1f17;
-  --masjid-cream-dark: #162b1f;
-  --card-bg: #1a2e22;
-  --card-border: #2a4a35;
-  --text-primary: #e8f5ee;
-  --text-secondary: #9dc4ad;
+  --masjid-gold-1: #d4a843;
 }
 
 body {
@@ -24,6 +15,7 @@ body {
   transition: background-color 0.3s ease;
 }
 
+/* ── Animated Gold Border ── */
 @keyframes borderRotate {
   0% {
     transform: rotate(0deg);
@@ -48,26 +40,27 @@ body {
   background: conic-gradient(
     from 0deg,
     transparent 0deg,
-    var(--masjid-gold-1) 170deg,
-    transparent 200deg,
+    var(--masjid-gold-1) 140deg,
+    transparent 180deg,
     transparent 360deg
   );
-  animation: borderRotate 3s linear infinite;
+  animation: borderRotate 4s linear infinite;
 }
 
 .card-border-animated::after {
   content: "";
   position: absolute;
-  inset: 4px;
+  inset: 3px;
   border-radius: 16px;
   background-color: var(--masjid-green);
   z-index: -1;
 }
 
+/* ── Staggered Fade In Up ── */
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(16px);
   }
   to {
     opacity: 1;
@@ -77,5 +70,5 @@ body {
 
 .fade-in-up {
   opacity: 0;
-  animation: fadeInUp 0.5s ease forwards;
+  animation: fadeInUp 0.45s ease forwards;
 }

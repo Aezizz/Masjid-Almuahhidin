@@ -32,8 +32,14 @@ function AvatarDefault({ nama }) {
 
 function Struktural() {
   useEffect(() => {
-    AOS.init({ duration: 700, once: true, easing: "ease-out-cubic" });
+    AOS.init({
+      duration: 800,
+      once: true,
+      easing: "ease-out-cubic",
+      offset: 80,
+    });
   }, []);
+
   return (
     <div
       className="min-h-screen"
@@ -41,14 +47,14 @@ function Struktural() {
     >
       {/* Header */}
       <div
-        className="relative overflow-hidden pt-28 pb-16 px-4 text-center text-white"
+        className="relative overflow-hidden pt-28 pb-16 px-6 text-center text-white"
         style={{ backgroundColor: "var(--masjid-green)" }}
       >
         <div
           className="absolute inset-0"
           style={{ backgroundImage: arabesque, backgroundSize: "80px 80px" }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/30" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/40" />
         <div className="relative">
           <p
             className="text-xs font-semibold tracking-widest uppercase mb-3"
@@ -56,60 +62,55 @@ function Struktural() {
           >
             Masjid Al-Muwahhidin
           </p>
-          <h1 className="text-4xl font-bold mb-2">Struktural Masjid</h1>
+          <h1 className="text-3xl sm:text-4xl font-bold mb-2">
+            Struktural Masjid
+          </h1>
           <p className="text-white/70 text-sm">
             Pengurus & Divisi Masjid Al-Muwahhidin
           </p>
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto px-4 -mt-6 pt-8 pb-16">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 -mt-6 pt-8 pb-16">
         {/* Visi Misi */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-12">
-          <div
-            className="rounded-2xl p-6 border"
-            data-aos="fade-right"
-            style={{ backgroundColor: "white", borderColor: "#e5d9cc" }}
-          >
-            <p
-              className="text-xs font-semibold tracking-widest uppercase mb-3"
-              style={{ color: "var(--masjid-gold)" }}
+          {[
+            {
+              dir: "fade-right",
+              label: "Visi",
+              judul: "Menjadi Masjid yang Makmur",
+              isi: "Mewujudkan masjid sebagai pusat ibadah, pendidikan, dan pemberdayaan umat yang bermartabat.",
+            },
+            {
+              dir: "fade-left",
+              label: "Misi",
+              judul: "Langkah Nyata untuk Umat",
+              isi: "Menyelenggarakan kegiatan ibadah, pendidikan, dan sosial yang bermanfaat bagi seluruh jamaah.",
+            },
+          ].map((item, i) => (
+            <div
+              key={i}
+              className="rounded-2xl p-6 border transition-all duration-300 hover:shadow-md"
+              data-aos={item.dir}
+              style={{ backgroundColor: "white", borderColor: "#e5d9cc" }}
             >
-              Visi
-            </p>
-            <p
-              className="font-bold text-lg mb-2"
-              style={{ color: "var(--masjid-green)" }}
-            >
-              Menjadi Masjid yang Makmur
-            </p>
-            <p className="text-gray-500 text-sm leading-relaxed">
-              Mewujudkan masjid sebagai pusat ibadah, pendidikan, dan
-              pemberdayaan umat yang bermartabat.
-            </p>
-          </div>
-          <div
-            className="rounded-2xl p-6 border"
-            data-aos="fade-left"
-            style={{ backgroundColor: "white", borderColor: "#e5d9cc" }}
-          >
-            <p
-              className="text-xs font-semibold tracking-widest uppercase mb-3"
-              style={{ color: "var(--masjid-gold)" }}
-            >
-              Misi
-            </p>
-            <p
-              className="font-bold text-lg mb-2"
-              style={{ color: "var(--masjid-green)" }}
-            >
-              Langkah Nyata untuk Umat
-            </p>
-            <p className="text-gray-500 text-sm leading-relaxed">
-              Menyelenggarakan kegiatan ibadah, pendidikan, dan sosial yang
-              bermanfaat bagi seluruh jamaah.
-            </p>
-          </div>
+              <p
+                className="text-xs font-semibold tracking-widest uppercase mb-3"
+                style={{ color: "var(--masjid-gold)" }}
+              >
+                {item.label}
+              </p>
+              <p
+                className="font-bold text-lg mb-2"
+                style={{ color: "var(--masjid-green)" }}
+              >
+                {item.judul}
+              </p>
+              <p className="text-slate-500 text-sm leading-relaxed">
+                {item.isi}
+              </p>
+            </div>
+          ))}
         </div>
 
         {/* Pengurus */}
@@ -119,17 +120,17 @@ function Struktural() {
         >
           👥 Susunan Pengurus
         </p>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-5 mb-12">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-12">
           {pengurusData.map((p, i) => (
             <div
               key={i}
               data-aos="fade-up"
-              data-aos-delay={i * 100}
-              className="rounded-2xl p-6 text-center border transition-all duration-300 hover:-translate-y-1"
+              data-aos-delay={i * 80}
+              className="rounded-2xl p-5 text-center border transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-md"
               style={{ backgroundColor: "white", borderColor: "#e5d9cc" }}
               onMouseEnter={(e) =>
                 (e.currentTarget.style.boxShadow =
-                  "0 0 0 2px var(--masjid-green)")
+                  "0 0 0 2px var(--masjid-green), 0 4px 20px rgba(26,61,43,0.1)")
               }
               onMouseLeave={(e) => (e.currentTarget.style.boxShadow = "none")}
             >
@@ -161,9 +162,10 @@ function Struktural() {
           ))}
         </div>
 
-        {/* Coming Soon Banner */}
+        {/* Coming Soon */}
         <div
           className="rounded-2xl p-8 text-center text-white relative overflow-hidden"
+          data-aos="fade-up"
           style={{ backgroundColor: "var(--masjid-green)" }}
         >
           <div

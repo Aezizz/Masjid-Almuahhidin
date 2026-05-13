@@ -4,7 +4,6 @@ import "aos/dist/aos.css";
 
 const SHEETS_URL =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vRbvc5UFLbApaLKDUIPltm8Enh4H4UvqiTYk_s6AOWoYXcIb1Fjxpvb-BKwUfPVFbpwbaxnkJd1E5bn/pub?gid=0&single=true&output=csv";
-
 const WA_ADMIN = "6281210667215";
 
 const rekeningList = [
@@ -56,7 +55,7 @@ function LaporanKeuangan({ laporan, loading, error }) {
 
   if (loading)
     return (
-      <div className="text-center text-gray-400 py-12">Memuat data...</div>
+      <div className="text-center text-slate-400 py-12">Memuat data...</div>
     );
   if (error)
     return <div className="text-center text-red-400 py-12">{error}</div>;
@@ -69,35 +68,35 @@ function LaporanKeuangan({ laporan, loading, error }) {
           data-aos="fade-up"
         >
           <div className="px-6 py-4 border-b border-gray-100">
-            <h3 className="font-bold text-gray-800">5 Transaksi Terbaru</h3>
-            <p className="text-gray-400 text-xs mt-0.5">
+            <h3 className="font-bold text-slate-800">5 Transaksi Terbaru</h3>
+            <p className="text-slate-400 text-xs mt-0.5">
               Data langsung dari Google Sheets pengurus
             </p>
           </div>
           {lima_terbaru.map((item, i) => (
             <div
               key={i}
-              className="flex items-center justify-between px-6 py-4 border-b border-gray-50 last:border-0 hover:bg-gray-50 transition-colors"
+              className="flex items-center justify-between px-6 py-4 border-b border-gray-50 last:border-0 hover:bg-gray-50 transition-colors duration-200"
             >
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center text-sm">
+                <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center text-sm flex-shrink-0">
                   💰
                 </div>
                 <div>
-                  <p className="font-medium text-gray-800 text-sm">
+                  <p className="font-medium text-slate-800 text-sm">
                     {item.keterangan}
                   </p>
-                  <p className="text-xs text-gray-400">{item.tanggal}</p>
+                  <p className="text-xs text-slate-400">{item.tanggal}</p>
                 </div>
               </div>
-              <p className="font-bold text-green-700 text-sm">
+              <p className="font-bold text-green-700 text-sm flex-shrink-0">
                 {formatRupiah(item.jumlah)}
               </p>
             </div>
           ))}
           <button
             onClick={() => setLihatSemua(true)}
-            className="w-full py-4 text-sm font-semibold hover:bg-green-50 transition-colors border-t border-gray-100"
+            className="w-full py-4 text-sm font-semibold hover:bg-green-50 transition-colors duration-200 border-t border-gray-100"
             style={{ color: "var(--masjid-green)" }}
           >
             Lihat Semua Transaksi →
@@ -108,7 +107,7 @@ function LaporanKeuangan({ laporan, loading, error }) {
         <div className="flex flex-col gap-4">
           <button
             onClick={() => setLihatSemua(false)}
-            className="self-start text-sm font-semibold text-gray-500 hover:text-gray-700"
+            className="self-start text-sm font-semibold text-slate-500 hover:text-slate-700 transition-colors duration-200"
           >
             ← Kembali ke 5 Terbaru
           </button>
@@ -143,17 +142,17 @@ function LaporanKeuangan({ laporan, loading, error }) {
                   {items.map((item, i) => (
                     <div
                       key={i}
-                      className="flex items-center justify-between px-6 py-3 border-b border-gray-50 last:border-0 hover:bg-gray-50 transition-colors"
+                      className="flex items-center justify-between px-6 py-3 border-b border-gray-50 last:border-0 hover:bg-gray-50 transition-colors duration-200"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="w-7 h-7 bg-green-100 rounded-full flex items-center justify-center text-xs">
+                        <div className="w-7 h-7 bg-green-100 rounded-full flex items-center justify-center text-xs flex-shrink-0">
                           💰
                         </div>
-                        <p className="text-sm text-gray-700">
+                        <p className="text-sm text-slate-700">
                           {item.keterangan}
                         </p>
                       </div>
-                      <p className="font-semibold text-green-700 text-sm">
+                      <p className="font-semibold text-green-700 text-sm flex-shrink-0">
                         {formatRupiah(item.jumlah)}
                       </p>
                     </div>
@@ -171,7 +170,6 @@ function LaporanKeuangan({ laporan, loading, error }) {
 function SidebarDalil() {
   return (
     <div className="flex flex-col gap-4">
-      {/* Card Dalil Quran */}
       <div
         className="rounded-2xl p-5 relative overflow-hidden"
         style={{ backgroundColor: "var(--masjid-green)" }}
@@ -200,8 +198,6 @@ function SidebarDalil() {
           </p>
         </div>
       </div>
-
-      {/* Card Hadits */}
       <div
         className="rounded-2xl p-5 border"
         style={{ backgroundColor: "white", borderColor: "#e5d9cc" }}
@@ -219,10 +215,8 @@ function SidebarDalil() {
           "Sedekah tidak akan mengurangi harta. Allah akan menambah kemuliaan
           orang yang memaafkan."
         </p>
-        <p className="text-xs font-semibold text-gray-400">— HR. Muslim</p>
+        <p className="text-xs font-semibold text-slate-400">— HR. Muslim</p>
       </div>
-
-      {/* Card Keutamaan */}
       <div
         className="rounded-2xl p-5 border"
         style={{
@@ -245,7 +239,7 @@ function SidebarDalil() {
           ].map((item, i) => (
             <li
               key={i}
-              className="flex items-start gap-2 text-xs text-gray-600"
+              className="flex items-start gap-2 text-xs text-slate-600"
             >
               <span style={{ color: "var(--masjid-gold)" }}>•</span>
               <span>{item}</span>
@@ -271,9 +265,12 @@ function Donasi() {
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    AOS.init({ duration: 700, once: true, easing: "ease-out-cubic" });
-  }, []);
-  useEffect(() => {
+    AOS.init({
+      duration: 800,
+      once: true,
+      easing: "ease-out-cubic",
+      offset: 80,
+    });
     fetch(SHEETS_URL)
       .then((res) => res.text())
       .then((text) => {
@@ -311,6 +308,13 @@ function Donasi() {
     setStep(3);
   }
 
+  const inputClass =
+    "w-full px-4 py-3 rounded-xl border text-sm outline-none transition-all duration-200";
+  const inputStyle = {
+    borderColor: "#e5d9cc",
+    backgroundColor: "var(--masjid-cream)",
+  };
+
   return (
     <div
       className="min-h-screen"
@@ -318,14 +322,14 @@ function Donasi() {
     >
       {/* Header */}
       <div
-        className="relative overflow-hidden pt-28 pb-16 px-4 text-center text-white"
+        className="relative overflow-hidden pt-28 pb-16 px-6 text-center text-white"
         style={{ backgroundColor: "var(--masjid-green)" }}
       >
         <div
           className="absolute inset-0"
           style={{ backgroundImage: arabesque, backgroundSize: "80px 80px" }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/30" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/40" />
         <div className="relative">
           <p
             className="text-xs font-semibold tracking-widest uppercase mb-3"
@@ -333,12 +337,14 @@ function Donasi() {
           >
             Masjid Al-Muwahhidin
           </p>
-          <h1 className="text-4xl font-bold mb-2">Donasi & Infaq</h1>
+          <h1 className="text-3xl sm:text-4xl font-bold mb-2">
+            Donasi & Infaq
+          </h1>
           <p className="text-white/70 text-sm">
-            Salurkan donasi Anda untuk kemakmuran Masjid Al-Muahhidin
+            Salurkan donasi Anda untuk kemakmuran Masjid Al-Muwahhidin
           </p>
           <div
-            className="mt-8 inline-block backdrop-blur border border-white/20 rounded-2xl px-10 py-5"
+            className="mt-8 inline-block backdrop-blur-md border border-white/20 rounded-2xl px-8 sm:px-10 py-5"
             style={{ backgroundColor: "rgba(255,255,255,0.1)" }}
           >
             <p className="text-xs mb-1" style={{ color: "var(--masjid-gold)" }}>
@@ -356,9 +362,12 @@ function Donasi() {
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto px-4 -mt-6 pt-8 pb-16">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 -mt-6 pt-8 pb-16">
         {/* Tab */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-1.5 flex gap-1 mb-6">
+        <div
+          className="bg-white rounded-2xl shadow-sm border border-gray-100 p-1.5 flex gap-1 mb-6"
+          data-aos="fade-up"
+        >
           {[
             { key: "donasi", label: "💝 Donasi Sekarang" },
             { key: "laporan", label: "📊 Laporan Keuangan" },
@@ -369,7 +378,7 @@ function Donasi() {
                 setActiveTab(tab.key);
                 setStep(1);
               }}
-              className="flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all"
+              className="flex-1 h-10 rounded-xl text-sm font-semibold transition-all duration-300"
               style={
                 activeTab === tab.key
                   ? { backgroundColor: "var(--masjid-green)", color: "white" }
@@ -381,19 +390,16 @@ function Donasi() {
           ))}
         </div>
 
-        {/* Tab Donasi */}
         {activeTab === "donasi" && (
           <div
             className={
               step === 1 ? "grid grid-cols-1 lg:grid-cols-3 gap-6" : ""
             }
           >
-            {/* Sidebar Dalil — hanya step 1 */}
             {step === 1 && <SidebarDalil />}
 
-            {/* Konten Utama */}
             <div className={step === 1 ? "lg:col-span-2" : ""}>
-              {/* Step 1 — Form */}
+              {/* Step 1 */}
               {step === 1 && (
                 <div
                   className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6"
@@ -406,7 +412,6 @@ function Donasi() {
                     📋 Isi Data Donasi
                   </h2>
 
-                  {/* Nama */}
                   <div className="mb-4">
                     <div className="flex items-center justify-between mb-1.5">
                       <label
@@ -419,7 +424,7 @@ function Donasi() {
                         onClick={() =>
                           setNama(nama === "Hamba Allah" ? "" : "Hamba Allah")
                         }
-                        className="text-xs px-3 py-1 rounded-full transition-all border"
+                        className="text-xs px-3 py-1 rounded-full transition-all duration-200 border"
                         style={
                           nama === "Hamba Allah"
                             ? {
@@ -445,11 +450,8 @@ function Donasi() {
                       placeholder="Masukkan nama Anda"
                       value={nama}
                       onChange={(e) => setNama(e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl border text-sm outline-none transition-all"
-                      style={{
-                        borderColor: "#e5d9cc",
-                        backgroundColor: "var(--masjid-cream)",
-                      }}
+                      className={inputClass}
+                      style={inputStyle}
                       onFocus={(e) =>
                         (e.target.style.borderColor = "var(--masjid-green)")
                       }
@@ -457,7 +459,6 @@ function Donasi() {
                     />
                   </div>
 
-                  {/* Deskripsi */}
                   <div className="mb-4">
                     <label
                       className="text-sm font-semibold mb-1.5 block"
@@ -470,11 +471,8 @@ function Donasi() {
                       placeholder="Contoh: Infaq pembangunan, Sedekah Jumat, dll"
                       value={deskripsi}
                       onChange={(e) => setDeskripsi(e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl border text-sm outline-none transition-all"
-                      style={{
-                        borderColor: "#e5d9cc",
-                        backgroundColor: "var(--masjid-cream)",
-                      }}
+                      className={inputClass}
+                      style={inputStyle}
                       onFocus={(e) =>
                         (e.target.style.borderColor = "var(--masjid-green)")
                       }
@@ -482,7 +480,6 @@ function Donasi() {
                     />
                   </div>
 
-                  {/* Nominal */}
                   <div className="mb-4">
                     <label
                       className="text-sm font-semibold mb-1.5 block"
@@ -495,7 +492,7 @@ function Donasi() {
                         <button
                           key={n}
                           onClick={() => setJumlah(n.toString())}
-                          className="py-2 rounded-xl text-sm font-semibold transition-all border"
+                          className="h-10 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 border"
                           style={
                             jumlah === n.toString()
                               ? {
@@ -519,11 +516,8 @@ function Donasi() {
                       placeholder="Atau masukkan nominal lain..."
                       value={jumlah}
                       onChange={(e) => setJumlah(e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl border text-sm outline-none transition-all"
-                      style={{
-                        borderColor: "#e5d9cc",
-                        backgroundColor: "var(--masjid-cream)",
-                      }}
+                      className={inputClass}
+                      style={inputStyle}
                       onFocus={(e) =>
                         (e.target.style.borderColor = "var(--masjid-green)")
                       }
@@ -531,7 +525,6 @@ function Donasi() {
                     />
                   </div>
 
-                  {/* Metode */}
                   <div className="mb-6">
                     <label
                       className="text-sm font-semibold mb-1.5 block"
@@ -551,7 +544,7 @@ function Donasi() {
                         <button
                           key={m.key}
                           onClick={() => setMetode(m.key)}
-                          className="p-4 rounded-xl border text-left transition-all"
+                          className="p-4 rounded-xl border text-left transition-all duration-200"
                           style={
                             metode === m.key
                               ? {
@@ -595,7 +588,7 @@ function Donasi() {
                           <button
                             key={i}
                             onClick={() => setBankDipilih(rek.noRek)}
-                            className="p-4 rounded-xl border text-left transition-all"
+                            className="p-4 rounded-xl border text-left transition-all duration-200"
                             style={
                               bankDipilih === rek.noRek
                                 ? {
@@ -614,7 +607,7 @@ function Donasi() {
                             >
                               {rek.bank}
                             </p>
-                            <p className="text-xs text-gray-400 mt-0.5">
+                            <p className="text-xs text-slate-400 mt-0.5">
                               a.n. {rek.atasNama}
                             </p>
                           </button>
@@ -623,7 +616,6 @@ function Donasi() {
                     )}
                   </div>
 
-                  {/* Ringkasan */}
                   {nama && jumlah && metode && (
                     <div
                       className="rounded-xl p-4 mb-4 border"
@@ -639,51 +631,34 @@ function Donasi() {
                         Ringkasan Donasi
                       </p>
                       <div className="flex flex-col gap-1.5 text-sm">
-                        <div className="flex justify-between">
-                          <span className="text-gray-500">Nama</span>
-                          <span
-                            className="font-semibold"
-                            style={{ color: "var(--masjid-green)" }}
-                          >
-                            {nama}
-                          </span>
-                        </div>
-                        {deskripsi && (
-                          <div className="flex justify-between">
-                            <span className="text-gray-500">Keterangan</span>
+                        {[
+                          { label: "Nama", val: nama },
+                          ...(deskripsi
+                            ? [{ label: "Keterangan", val: deskripsi }]
+                            : []),
+                          { label: "Jumlah", val: formatRupiah(jumlah) },
+                          {
+                            label: "Metode",
+                            val: metode === "qris" ? "QRIS" : "Transfer Bank",
+                          },
+                        ].map((row, i) => (
+                          <div key={i} className="flex justify-between">
+                            <span className="text-slate-500">{row.label}</span>
                             <span
                               className="font-semibold"
                               style={{ color: "var(--masjid-green)" }}
                             >
-                              {deskripsi}
+                              {row.val}
                             </span>
                           </div>
-                        )}
-                        <div className="flex justify-between">
-                          <span className="text-gray-500">Jumlah</span>
-                          <span
-                            className="font-bold text-base"
-                            style={{ color: "var(--masjid-green)" }}
-                          >
-                            {formatRupiah(jumlah)}
-                          </span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-gray-500">Metode</span>
-                          <span
-                            className="font-semibold"
-                            style={{ color: "var(--masjid-green)" }}
-                          >
-                            {metode === "qris" ? "QRIS" : "Transfer Bank"}
-                          </span>
-                        </div>
+                        ))}
                       </div>
                     </div>
                   )}
 
                   <button
                     onClick={handleLanjut}
-                    className="w-full py-4 rounded-xl font-bold text-sm transition-all hover:opacity-90"
+                    className="w-full h-12 rounded-xl font-bold text-sm transition-all duration-300 hover:opacity-90 hover:shadow-md"
                     style={{
                       backgroundColor: "var(--masjid-green)",
                       color: "white",
@@ -694,12 +669,12 @@ function Donasi() {
                 </div>
               )}
 
-              {/* Step 2 — Pembayaran */}
+              {/* Step 2 */}
               {step === 2 && (
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                   <button
                     onClick={() => setStep(1)}
-                    className="text-sm text-gray-400 hover:text-gray-600 mb-4 flex items-center gap-1"
+                    className="text-sm text-slate-400 hover:text-slate-600 mb-4 flex items-center gap-1 transition-colors duration-200"
                   >
                     ← Kembali
                   </button>
@@ -709,7 +684,7 @@ function Donasi() {
                   >
                     {metode === "qris" ? "📱 Scan QRIS" : "🏦 Transfer Bank"}
                   </h2>
-                  <p className="text-sm text-gray-500 mb-6">
+                  <p className="text-sm text-slate-500 mb-6">
                     Silakan lakukan pembayaran sebesar{" "}
                     <span
                       className="font-bold"
@@ -718,17 +693,18 @@ function Donasi() {
                       {formatRupiah(jumlah)}
                     </span>
                   </p>
+
                   {metode === "qris" && (
                     <div className="text-center">
                       <div className="bg-gray-50 rounded-2xl w-56 h-56 mx-auto flex items-center justify-center border-2 border-dashed border-gray-200 mb-4">
                         <div className="text-center">
                           <p className="text-4xl mb-2">📱</p>
-                          <p className="text-xs text-gray-400">
+                          <p className="text-xs text-slate-400">
                             Upload foto QRIS di sini
                           </p>
                         </div>
                       </div>
-                      <p className="text-xs text-gray-400">
+                      <p className="text-xs text-slate-400">
                         Scan QR Code di atas menggunakan aplikasi apapun
                       </p>
                       <div
@@ -742,6 +718,7 @@ function Donasi() {
                       </div>
                     </div>
                   )}
+
                   {metode === "bank" && (
                     <div className="flex flex-col gap-3">
                       {rekeningList
@@ -752,7 +729,7 @@ function Donasi() {
                             className="rounded-2xl p-5 border"
                             style={{ borderColor: "#e5d9cc" }}
                           >
-                            <p className="text-xs text-gray-400 mb-1">
+                            <p className="text-xs text-slate-400 mb-1">
                               🏦 {rek.bank}
                             </p>
                             <p
@@ -761,11 +738,11 @@ function Donasi() {
                             >
                               {rek.noRek}
                             </p>
-                            <p className="text-xs text-gray-400 mb-3">
+                            <p className="text-xs text-slate-400 mb-3">
                               a.n. {rek.atasNama}
                             </p>
                             <div
-                              className="flex items-center justify-between p-3 rounded-xl mb-3"
+                              className="p-3 rounded-xl mb-3"
                               style={{
                                 backgroundColor: "var(--masjid-cream-dark)",
                               }}
@@ -779,7 +756,7 @@ function Donasi() {
                             </div>
                             <button
                               onClick={() => copyToClipboard(rek.noRek)}
-                              className="w-full py-2 rounded-xl text-sm font-semibold transition-all"
+                              className="w-full h-10 rounded-xl text-sm font-semibold transition-all duration-200"
                               style={{
                                 backgroundColor: "var(--masjid-green)",
                                 color: "white",
@@ -791,9 +768,10 @@ function Donasi() {
                         ))}
                     </div>
                   )}
+
                   <button
                     onClick={handleKonfirmasiWA}
-                    className="w-full mt-6 py-4 rounded-xl font-bold text-sm transition-all hover:opacity-90 flex items-center justify-center gap-2"
+                    className="w-full mt-6 h-12 rounded-xl font-bold text-sm transition-all duration-300 hover:opacity-90 hover:shadow-md flex items-center justify-center gap-2"
                     style={{ backgroundColor: "#25D366", color: "white" }}
                   >
                     💬 Perlu konfirmasi pembayaran?
@@ -801,7 +779,7 @@ function Donasi() {
                 </div>
               )}
 
-              {/* Step 3 — Selesai */}
+              {/* Step 3 */}
               {step === 3 && (
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 text-center">
                   <p className="text-6xl mb-4">🎉</p>
@@ -811,12 +789,12 @@ function Donasi() {
                   >
                     Jazakallahu Khairan!
                   </h2>
-                  <p className="text-gray-500 text-sm mb-2">
+                  <p className="text-slate-500 text-sm mb-2">
                     Konfirmasi donasi atas nama{" "}
                     <span className="font-bold">{nama}</span> telah dikirim ke
                     admin masjid.
                   </p>
-                  <p className="text-gray-400 text-xs mb-6">
+                  <p className="text-slate-400 text-xs mb-6">
                     Semoga donasi Anda menjadi amal jariyah yang berkah. 🤲
                   </p>
                   <button
@@ -828,7 +806,7 @@ function Donasi() {
                       setMetode("");
                       setBankDipilih(null);
                     }}
-                    className="px-6 py-3 rounded-xl text-sm font-bold transition-all hover:opacity-90"
+                    className="h-11 px-8 rounded-xl text-sm font-bold transition-all duration-300 hover:opacity-90"
                     style={{
                       backgroundColor: "var(--masjid-green)",
                       color: "white",
@@ -842,7 +820,6 @@ function Donasi() {
           </div>
         )}
 
-        {/* Tab Laporan */}
         {activeTab === "laporan" && (
           <LaporanKeuangan laporan={laporan} loading={loading} error={error} />
         )}
