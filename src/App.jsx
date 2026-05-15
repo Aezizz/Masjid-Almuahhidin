@@ -7,14 +7,14 @@ import Kegiatan from "./pages/Kegiatan";
 import Donasi from "./pages/Donasi";
 import ImamJumat from "./pages/ImamJumat";
 import Struktural from "./pages/Struktural";
-import Zakat from "./pages/Zakat";
+// import Zakat from "./pages/Zakat";
 import { PengumumanBanner } from "./components/Pengumuman";
 
 function App() {
   return (
     <BrowserRouter>
       <Navbar />
-      <main className="min-h-screen">
+      <main className="min-h-screen overflow-x-hidden">
         <PengumumanBanner />
         <Routes>
           <Route path="/" element={<Home />} />
@@ -23,7 +23,7 @@ function App() {
           <Route path="/donasi" element={<Donasi />} />
           <Route path="/imam-jumat" element={<ImamJumat />} />
           <Route path="/struktural" element={<Struktural />} />
-          <Route path="/zakat" element={<Zakat />} />
+          {/* <Route path="/zakat" element={<Zakat />} /> */}
         </Routes>
       </main>
       <Footer />

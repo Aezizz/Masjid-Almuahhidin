@@ -1,6 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import { ModalGaleri } from "../components/ModalGaleri";
 
 const arabesque = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='%23ffffff' stroke-width='0.5' opacity='0.15'%3E%3Cpath d='M40 0 L80 40 L40 80 L0 40 Z'/%3E%3Cpath d='M40 10 L70 40 L40 70 L10 40 Z'/%3E%3Ccircle cx='40' cy='40' r='15'/%3E%3Ccircle cx='40' cy='40' r='25'/%3E%3Cpath d='M40 0 L40 80 M0 40 L80 40'/%3E%3Cpath d='M15 15 L65 65 M65 15 L15 65'/%3E%3C/g%3E%3C/svg%3E")`;
 
@@ -31,6 +32,8 @@ function AvatarDefault({ nama }) {
 }
 
 function Struktural() {
+  const [modalPengurus, setModalPengurus] = useState(null);
+
   useEffect(() => {
     AOS.init({
       duration: 800,
@@ -40,11 +43,35 @@ function Struktural() {
     });
   }, []);
 
+  const floatClass = [
+    "float-a",
+    "float-b",
+    "float-c",
+    "float-a",
+    "float-b",
+    "float-c",
+  ];
+
   return (
     <div
       className="min-h-screen"
       style={{ backgroundColor: "var(--masjid-cream)" }}
     >
+      {modalPengurus && (
+        <ModalGaleri
+          judul={modalPengurus.nama}
+          deskripsi={modalPengurus.jabatan}
+          icon="👤"
+          fotos={[
+            {
+              foto: modalPengurus.foto,
+              keterangan: modalPengurus.jabatan,
+            },
+          ]}
+          onClose={() => setModalPengurus(null)}
+        />
+      )}
+
       {/* Header */}
       <div
         className="relative overflow-hidden pt-28 pb-16 px-6 text-center text-white"
@@ -120,13 +147,17 @@ function Struktural() {
         >
           👥 Susunan Pengurus
         </p>
+
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-12">
           {pengurusData.map((p, i) => (
             <div
               key={i}
               data-aos="fade-up"
               data-aos-delay={i * 80}
-              className="rounded-2xl p-5 text-center border transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-md"
+              onClick={() => p.foto && setModalPengurus(p)}
+              className={`rounded-2xl p-5 text-center border transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-md ${floatClass[i]} ${
+                p.foto ? "cursor-pointer" : "cursor-default"
+              }`}
               style={{ backgroundColor: "white", borderColor: "#e5d9cc" }}
               onMouseEnter={(e) =>
                 (e.currentTarget.style.boxShadow =

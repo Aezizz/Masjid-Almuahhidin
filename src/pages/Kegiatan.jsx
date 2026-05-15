@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import { ModalGaleri } from "../components/ModalGaleri";
 
 const DOCS_URL =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vSsdFggl3w1ZuW4hcKsv0bZcF6ZjR30a9pbLXzGcPrlSGbNkr4pareH6xcKBOixxWshWZfBXPn9nIu2/pub?gid=0&single=true&output=csv";
@@ -70,108 +71,6 @@ function parseCSV(text) {
     .filter((item) => item.foto);
 }
 
-function ModalKarousel({ kegiatan, fotos, onClose }) {
-  const [aktif, setAktif] = useState(0);
-  useEffect(() => {
-    const handleKey = (e) => {
-      if (e.key === "Escape") onClose();
-      if (e.key === "ArrowRight") setAktif((p) => (p + 1) % fotos.length);
-      if (e.key === "ArrowLeft")
-        setAktif((p) => (p - 1 + fotos.length) % fotos.length);
-    };
-    window.addEventListener("keydown", handleKey);
-    document.body.style.overflow = "hidden";
-    return () => {
-      window.removeEventListener("keydown", handleKey);
-      document.body.style.overflow = "auto";
-    };
-  }, [fotos.length, onClose]);
-
-  return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center px-4"
-      style={{ backgroundColor: "rgba(0,0,0,0.85)" }}
-      onClick={onClose}
-    >
-      <div
-        className="relative w-full max-w-3xl rounded-2xl overflow-hidden"
-        style={{ backgroundColor: "var(--masjid-green)" }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
-          <div>
-            <p className="font-bold text-white">{kegiatan}</p>
-            <p className="text-xs" style={{ color: "var(--masjid-gold)" }}>
-              {aktif + 1} / {fotos.length} foto
-            </p>
-          </div>
-          <button
-            onClick={onClose}
-            className="text-white/60 hover:text-white text-2xl transition-all duration-200"
-          >
-            ✕
-          </button>
-        </div>
-        <div className="relative aspect-video bg-black flex items-center justify-center overflow-hidden">
-          <img
-            src={fotos[aktif].foto}
-            alt={fotos[aktif].keterangan}
-            className="w-full h-full object-contain"
-            onError={(e) => {
-              e.target.src = "";
-              e.target.style.display = "none";
-            }}
-          />
-          {fotos.length > 1 && (
-            <>
-              <button
-                onClick={() =>
-                  setAktif((p) => (p - 1 + fotos.length) % fotos.length)
-                }
-                className="absolute left-3 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full flex items-center justify-center text-white font-bold text-xl transition-all duration-200 hover:scale-110"
-                style={{ backgroundColor: "rgba(0,0,0,0.55)" }}
-              >
-                ‹
-              </button>
-              <button
-                onClick={() => setAktif((p) => (p + 1) % fotos.length)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full flex items-center justify-center text-white font-bold text-xl transition-all duration-200 hover:scale-110"
-                style={{ backgroundColor: "rgba(0,0,0,0.55)" }}
-              >
-                ›
-              </button>
-            </>
-          )}
-        </div>
-        <div className="px-6 py-3 border-t border-white/10">
-          <p className="text-white/70 text-sm">{fotos[aktif].keterangan}</p>
-        </div>
-        {fotos.length > 1 && (
-          <div className="flex gap-2 px-6 pb-5 overflow-x-auto">
-            {fotos.map((item, i) => (
-              <button
-                key={i}
-                onClick={() => setAktif(i)}
-                className="flex-shrink-0 w-16 h-16 rounded-xl overflow-hidden border-2 transition-all duration-200"
-                style={{
-                  borderColor:
-                    i === aktif ? "var(--masjid-gold)" : "transparent",
-                }}
-              >
-                <img
-                  src={item.foto}
-                  alt={item.keterangan}
-                  className="w-full h-full object-cover"
-                />
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
-
 function Kegiatan() {
   const [dokumentasi, setDokumentasi] = useState({});
   const [modalData, setModalData] = useState(null);
@@ -184,6 +83,7 @@ function Kegiatan() {
       easing: "ease-out-cubic",
       offset: 80,
     });
+
     fetch(DOCS_URL)
       .then((res) => res.text())
       .then((text) => {
@@ -199,14 +99,18 @@ function Kegiatan() {
       .catch(() => setLoadingDocs(false));
   }, []);
 
+  const floatClass = ["float-a", "float-b", "float-c", "float-a"];
+
   return (
     <div
       className="min-h-screen"
       style={{ backgroundColor: "var(--masjid-cream)" }}
     >
       {modalData && (
-        <ModalKarousel
-          kegiatan={modalData.nama}
+        <ModalGaleri
+          judul={modalData.nama}
+          deskripsi={`${dokumentasi[modalData.nama]?.length || 0} foto dokumentasi`}
+          icon={kegiatanList.find((k) => k.nama === modalData.nama)?.icon}
           fotos={modalData.fotos}
           onClose={() => setModalData(null)}
         />
@@ -247,13 +151,8 @@ function Kegiatan() {
                 key={kegiatan.id}
                 data-aos="fade-up"
                 data-aos-delay={idx * 100}
-                className="rounded-2xl p-6 border transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-lg"
+                className={`rounded-2xl p-6 border transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-lg cursor-pointer ${floatClass[idx]}`}
                 style={{ backgroundColor: "white", borderColor: "#e5d9cc" }}
-                onMouseEnter={(e) =>
-                  (e.currentTarget.style.boxShadow =
-                    "0 0 0 2px var(--masjid-green), 0 8px 24px rgba(26,61,43,0.12)")
-                }
-                onMouseLeave={(e) => (e.currentTarget.style.boxShadow = "none")}
               >
                 <div className="flex items-start justify-between mb-4">
                   <div
@@ -303,24 +202,18 @@ function Kegiatan() {
                 </div>
 
                 <button
-                  onClick={() =>
-                    fotos.length > 0 &&
-                    setModalData({ nama: kegiatan.nama, fotos })
-                  }
+                  onClick={() => {
+                    if (fotos.length > 0) {
+                      setModalData({ nama: kegiatan.nama, fotos });
+                    }
+                  }}
                   className="w-full h-10 rounded-xl text-sm font-semibold transition-all duration-300 flex items-center justify-center gap-2"
-                  style={
-                    fotos.length > 0
-                      ? {
-                          backgroundColor: "var(--masjid-cream-dark)",
-                          color: "var(--masjid-green)",
-                          cursor: "pointer",
-                        }
-                      : {
-                          backgroundColor: "#f3f4f6",
-                          color: "#9ca3af",
-                          cursor: "not-allowed",
-                        }
-                  }
+                  style={{
+                    backgroundColor:
+                      fotos.length > 0 ? "var(--masjid-cream-dark)" : "#f3f4f6",
+                    color: fotos.length > 0 ? "var(--masjid-green)" : "#9ca3af",
+                    cursor: fotos.length > 0 ? "pointer" : "not-allowed",
+                  }}
                 >
                   📷{" "}
                   {loadingDocs

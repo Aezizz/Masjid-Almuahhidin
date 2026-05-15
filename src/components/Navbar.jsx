@@ -55,9 +55,7 @@ function Navbar() {
             key={link.to}
             to={link.to}
             className={`text-xs font-semibold tracking-wider uppercase transition-all duration-200 whitespace-nowrap hover:text-white ${
-              location.pathname === link.to
-                ? "text-yellow-400"
-                : "text-white/75"
+              location.pathname === link.to ? "text-amber-300" : "text-white/75"
             }`}
           >
             {link.label}
@@ -74,7 +72,7 @@ function Navbar() {
             color: "var(--masjid-green)",
           }}
         >
-          💝 Donasi
+          Donasi
         </Link>
       </nav>
 
@@ -105,7 +103,7 @@ function Navbar() {
                 to={link.to}
                 className={`text-sm font-semibold tracking-wide uppercase py-1 transition-all duration-200 ${
                   location.pathname === link.to
-                    ? "text-yellow-400"
+                    ? "text-amber-300"
                     : "text-white/80"
                 }`}
                 onClick={() => setMenuOpen(false)}
@@ -122,7 +120,7 @@ function Navbar() {
               }}
               onClick={() => setMenuOpen(false)}
             >
-              💝 Donasi Sekarang
+              Donasi Sekarang
             </Link>
           </div>
         )}

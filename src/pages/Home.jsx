@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import { ModalGaleri } from "../components/ModalGaleri";
 
 const SEJARAH_URL =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vSqDUgS8Tuq3wMTHILWCz9uKHw8CVVH4bxQO_vMextZpZ7qF3axv04PxBKW2VSPk8naN8iWGs9qvlGF/pub?gid=0&single=true&output=csv";
@@ -49,104 +50,6 @@ function useFotoSejarah() {
   return { fotoUtama, galeri };
 }
 
-function ModalSejarah({ galeri, onClose }) {
-  const [aktif, setAktif] = useState(0);
-  useEffect(() => {
-    const handleKey = (e) => {
-      if (e.key === "Escape") onClose();
-      if (e.key === "ArrowRight") setAktif((p) => (p + 1) % galeri.length);
-      if (e.key === "ArrowLeft")
-        setAktif((p) => (p - 1 + galeri.length) % galeri.length);
-    };
-    window.addEventListener("keydown", handleKey);
-    document.body.style.overflow = "hidden";
-    return () => {
-      window.removeEventListener("keydown", handleKey);
-      document.body.style.overflow = "auto";
-    };
-  }, [galeri.length, onClose]);
-
-  return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center px-4"
-      style={{ backgroundColor: "rgba(0,0,0,0.85)" }}
-      onClick={onClose}
-    >
-      <div
-        className="relative w-full max-w-3xl rounded-2xl overflow-hidden"
-        style={{ backgroundColor: "var(--masjid-green)" }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
-          <div>
-            <p className="font-bold text-white">Dokumentasi Sejarah Masjid</p>
-            <p className="text-xs" style={{ color: "var(--masjid-gold)" }}>
-              {aktif + 1} / {galeri.length} foto
-            </p>
-          </div>
-          <button
-            onClick={onClose}
-            className="text-white/60 hover:text-white text-2xl transition-all duration-300"
-          >
-            ✕
-          </button>
-        </div>
-        <div className="relative aspect-video bg-black flex items-center justify-center overflow-hidden">
-          <img
-            src={galeri[aktif]?.foto}
-            alt={galeri[aktif]?.keterangan}
-            className="w-full h-full object-contain"
-          />
-          {galeri.length > 1 && (
-            <>
-              <button
-                onClick={() =>
-                  setAktif((p) => (p - 1 + galeri.length) % galeri.length)
-                }
-                className="absolute left-3 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-xl transition-all duration-300 hover:scale-110"
-                style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
-              >
-                ‹
-              </button>
-              <button
-                onClick={() => setAktif((p) => (p + 1) % galeri.length)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-xl transition-all duration-300 hover:scale-110"
-                style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
-              >
-                ›
-              </button>
-            </>
-          )}
-        </div>
-        <div className="px-6 py-3 border-t border-white/10">
-          <p className="text-white/70 text-sm">{galeri[aktif]?.keterangan}</p>
-        </div>
-        {galeri.length > 1 && (
-          <div className="flex gap-2 px-6 pb-5 overflow-x-auto">
-            {galeri.map((item, i) => (
-              <button
-                key={i}
-                onClick={() => setAktif(i)}
-                className="flex-shrink-0 w-16 h-16 rounded-xl overflow-hidden border-2 transition-all duration-300"
-                style={{
-                  borderColor:
-                    i === aktif ? "var(--masjid-gold)" : "transparent",
-                }}
-              >
-                <img
-                  src={item.foto}
-                  alt={item.keterangan}
-                  className="w-full h-full object-cover"
-                />
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
-
 const arabesque = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='%23ffffff' stroke-width='0.5' opacity='0.15'%3E%3Cpath d='M40 0 L80 40 L40 80 L0 40 Z'/%3E%3Cpath d='M40 10 L70 40 L40 70 L10 40 Z'/%3E%3Ccircle cx='40' cy='40' r='15'/%3E%3Ccircle cx='40' cy='40' r='25'/%3E%3Cpath d='M40 0 L40 80 M0 40 L80 40'/%3E%3Cpath d='M15 15 L65 65 M65 15 L15 65'/%3E%3C/g%3E%3C/svg%3E")`;
 
 const stats = [
@@ -187,6 +90,145 @@ const layanan = [
   },
 ];
 
+// ── Snackbar state (global sederhana) ──
+let snackbarTimer = null;
+
+function Snackbar() {
+  const [state, setState] = useState({ show: false, text: "" });
+
+  useEffect(() => {
+    window.__showSnackbar = (text) => {
+      clearTimeout(snackbarTimer);
+      setState({ show: true, text });
+      snackbarTimer = setTimeout(
+        () => setState({ show: false, text: "" }),
+        2200,
+      );
+    };
+
+    return () => {
+      delete window.__showSnackbar;
+    };
+  }, []);
+
+  return (
+    <div
+      className="fixed bottom-7 left-1/2 z-50 flex items-center gap-3 px-6 py-3 rounded-full text-white text-sm font-semibold transition-all duration-300"
+      style={{
+        transform: state.show
+          ? "translateX(-50%) translateY(0)"
+          : "translateX(-50%) translateY(20px)",
+        opacity: state.show ? 1 : 0,
+        pointerEvents: "none",
+        backgroundColor: "var(--masjid-green)",
+        boxShadow: "0 8px 24px rgba(0,0,0,0.25)",
+        border: "1px solid rgba(201,168,76,0.3)",
+      }}
+    >
+      <span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+      <span>{state.text}</span>
+    </div>
+  );
+}
+
+function LayananCard({ item, index }) {
+  const navigate = useNavigate();
+  const [ripples, setRipples] = useState([]);
+
+  const floatClass = ["float-a", "float-b", "float-c", "float-b"][index % 4];
+
+  function handleClick(e) {
+    // Ripple
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    const id = Date.now();
+    setRipples((prev) => [...prev, { id, x, y }]);
+    setTimeout(
+      () => setRipples((prev) => prev.filter((r) => r.id !== id)),
+      600,
+    );
+
+    // Snackbar
+    window.__showSnackbar?.(`✨ Membuka ${item.judul}`);
+
+    // Navigate
+    setTimeout(() => navigate(item.to), 300);
+  }
+
+  return (
+    <div
+      data-aos="fade-up"
+      data-aos-delay={index * 100}
+      onClick={handleClick}
+      className={`relative rounded-3xl p-6 cursor-pointer overflow-hidden transition-all duration-350 group ${floatClass}`}
+      style={{
+        backgroundColor: "white",
+        boxShadow: "0 5px 20px rgba(0,0,0,0.05)",
+        border: "1px solid rgba(0,0,0,0.04)",
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.transform = "translateY(-8px)";
+        e.currentTarget.style.boxShadow = "0 25px 35px -12px rgba(0,0,0,0.15)";
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.transform = "";
+        e.currentTarget.style.boxShadow = "0 5px 20px rgba(0,0,0,0.05)";
+      }}
+    >
+      {/* Gradient border on hover */}
+      <div
+        className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-400 pointer-events-none"
+        style={{
+          padding: "2px",
+          background:
+            "linear-gradient(135deg, var(--masjid-green), var(--masjid-gold), var(--masjid-green))",
+          WebkitMask:
+            "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+          WebkitMaskComposite: "xor",
+          maskComposite: "exclude",
+        }}
+      />
+
+      {/* Ripples */}
+      {ripples.map((r) => (
+        <span
+          key={r.id}
+          className="absolute rounded-full pointer-events-none"
+          style={{
+            left: r.x,
+            top: r.y,
+            width: 20,
+            height: 20,
+            marginLeft: -10,
+            marginTop: -10,
+            background:
+              "radial-gradient(circle, rgba(26,61,43,0.3) 0%, rgba(26,61,43,0.1) 80%)",
+            animation: "rippleAnim 0.55s linear forwards",
+          }}
+        />
+      ))}
+
+      {/* Konten */}
+      <div className="relative z-10">
+        <div className="text-4xl mb-4 transition-transform duration-200 group-hover:scale-110 inline-block">
+          {item.icon}
+        </div>
+        <h3
+          className="font-bold mb-2 text-sm"
+          style={{ color: "var(--masjid-green)" }}
+        >
+          {item.judul}
+        </h3>
+        <p className="text-slate-500 text-xs leading-relaxed">
+          {item.deskripsi}
+        </p>
+      </div>
+    </div>
+  );
+}
+
 function Home() {
   const jam = useJamRealtime();
   const scrollOffset = useParallax();
@@ -217,10 +259,13 @@ function Home() {
   });
 
   return (
-    <div>
-      {modalSejarahOpen && (
-        <ModalSejarah
-          galeri={galeri}
+    <div className="w-full overflow-x-hidden">
+      {modalSejarahOpen && galeri.length > 0 && (
+        <ModalGaleri
+          judul="Dokumentasi Sejarah Masjid"
+          deskripsi="Foto-foto dokumentasi bersejarah"
+          icon="🕌"
+          fotos={galeri}
           onClose={() => setModalSejarahOpen(false)}
         />
       )}
@@ -241,7 +286,7 @@ function Home() {
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/50" />
 
-        <div className="relative text-center text-white px-6 max-w-4xl mx-auto">
+        <div className="relative text-center text-white px-6 max-w-4xl mx-auto w-full">
           <p
             className="text-xs font-semibold tracking-[0.3em] uppercase mb-5"
             style={{ color: "var(--masjid-gold)" }}
@@ -311,7 +356,7 @@ function Home() {
                 color: "var(--masjid-green)",
               }}
             >
-              💝 Donasi Sekarang
+              Donasi Sekarang
             </Link>
             <Link
               to="/jadwal"
@@ -521,6 +566,7 @@ function Home() {
       </section>
 
       {/* ── LAYANAN ── */}
+
       <section
         className="py-20 px-6"
         style={{ backgroundColor: "var(--masjid-cream-dark)" }}
@@ -547,46 +593,13 @@ function Home() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {layanan.map((item, i) => (
-              <Link
-                key={i}
-                to={item.to}
-                data-aos="fade-up"
-                data-aos-delay={i * 100}
-                className="rounded-2xl p-6 transition-all duration-300 ease-in-out hover:-translate-y-1 group"
-                style={{
-                  backgroundColor: "rgba(255,255,255,0.65)",
-                  backdropFilter: "blur(12px)",
-                  WebkitBackdropFilter: "blur(12px)",
-                  border: "1px solid rgba(255,255,255,0.4)",
-                  boxShadow: "0 4px 24px rgba(26,61,43,0.07)",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor =
-                    "rgba(255,255,255,0.85)";
-                  e.currentTarget.style.boxShadow =
-                    "0 0 0 2px var(--masjid-green), 0 8px 32px rgba(26,61,43,0.15)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor =
-                    "rgba(255,255,255,0.65)";
-                  e.currentTarget.style.boxShadow =
-                    "0 4px 24px rgba(26,61,43,0.07)";
-                }}
-              >
-                <div className="text-3xl mb-4">{item.icon}</div>
-                <h3
-                  className="font-bold mb-2 text-sm"
-                  style={{ color: "var(--masjid-green)" }}
-                >
-                  {item.judul}
-                </h3>
-                <p className="text-slate-500 text-xs leading-relaxed">
-                  {item.deskripsi}
-                </p>
-              </Link>
+              <LayananCard key={i} item={item} index={i} />
             ))}
           </div>
         </div>
+
+        {/* Snackbar */}
+        <Snackbar />
       </section>
 
       {/* ── CTA ── */}
