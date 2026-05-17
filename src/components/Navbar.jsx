@@ -14,7 +14,11 @@ function Navbar() {
 
   // Tutup menu saat route berubah
   useEffect(() => {
-    setMenuOpen(false);
+    const t = setTimeout(() => {
+      setMenuOpen(false);
+    }, 0);
+
+    return () => clearTimeout(t);
   }, [location.pathname]);
 
   const navLinks = [

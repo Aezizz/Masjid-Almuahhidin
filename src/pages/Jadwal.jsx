@@ -275,7 +275,15 @@ function WaktuCard({ waktu, jadwal, isBerikutnya, index }) {
 
 function Jadwal() {
   const [jadwal, setJadwal] = useState(null);
-  const [tanggal, setTanggal] = useState("");
+  const [tanggal] = useState(() => {
+    const now = new Date();
+    return now.toLocaleDateString("id-ID", {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [countdown, setCountdown] = useState("");
@@ -287,18 +295,12 @@ function Jadwal() {
       easing: "ease-out-cubic",
       offset: 80,
     });
+
     const now = new Date();
-    setTanggal(
-      now.toLocaleDateString("id-ID", {
-        weekday: "long",
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      }),
-    );
     const y = now.getFullYear();
     const m = now.getMonth() + 1;
     const d = now.getDate();
+
     fetch(`https://api.myquran.com/v2/sholat/jadwal/${KOTA_ID}/${y}/${m}/${d}`)
       .then((res) => res.json())
       .then((data) => {

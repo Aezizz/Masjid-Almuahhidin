@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -24,6 +24,69 @@ function useParallax() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
   return offset;
+}
+// ── Typewriter Hook ──
+function useTypewriter(text, speed = 60, delay = 0) {
+  const [displayed, setDisplayed] = useState("");
+  const [done, setDone] = useState(false);
+
+  useEffect(() => {
+    let i = 0;
+    setDisplayed("");
+    setDone(false);
+    const timeout = setTimeout(() => {
+      const interval = setInterval(() => {
+        setDisplayed(text.slice(0, i + 1));
+        i++;
+        if (i >= text.length) {
+          clearInterval(interval);
+          setDone(true);
+        }
+      }, speed);
+      return () => clearInterval(interval);
+    }, delay);
+    return () => clearTimeout(timeout);
+  }, [text, speed, delay]);
+
+  return { displayed, done };
+}
+
+// ── Count Up Jam Hook ──
+function useJamCountUp(targetJam, duration = 1200) {
+  const [display, setDisplay] = useState("00.00");
+  const [displaySec, setDisplaySec] = useState("00");
+
+  useEffect(() => {
+    if (!targetJam) return;
+    const [h, m, s] = targetJam.split(":").map(Number);
+    const totalSec = h * 3600 + m * 60 + (s || 0);
+    const steps = 40;
+    const stepTime = duration / steps;
+    let step = 0;
+    const interval = setInterval(() => {
+      step++;
+      const cur = Math.floor((totalSec * step) / steps);
+      const ch = Math.floor(cur / 3600)
+        .toString()
+        .padStart(2, "0");
+      const cm = Math.floor((cur % 3600) / 60)
+        .toString()
+        .padStart(2, "0");
+      const cs = (cur % 60).toString().padStart(2, "0");
+      setDisplay(`${ch}.${cm}`);
+      setDisplaySec(cs);
+      if (step >= steps) {
+        clearInterval(interval);
+        setDisplay(
+          `${h.toString().padStart(2, "0")}.${m.toString().padStart(2, "0")}`,
+        );
+        setDisplaySec((s || 0).toString().padStart(2, "0"));
+      }
+    }, stepTime);
+    return () => clearInterval(interval);
+  }, [targetJam, duration]);
+
+  return { display, displaySec };
 }
 
 function useFotoSejarah() {
@@ -244,12 +307,27 @@ function Home() {
     });
   }, []);
 
-  const jamString = jam.toLocaleTimeString("id-ID", {
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-    hour12: false,
-  });
+  const jamTargetRef = useRef(null);
+  if (!jamTargetRef.current) {
+    const now = new Date();
+    jamTargetRef.current = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}:${now.getSeconds().toString().padStart(2, "0")}`;
+  }
+  const { display: jamDisplay, displaySec } = useJamCountUp(
+    jamTargetRef.current,
+    1200,
+  );
+
+  const { displayed: twSambutan, done: twSambutanDone } = useTypewriter(
+    "Selamat Datang di",
+    70,
+    300,
+  );
+
+  const { displayed: twDeskripsi } = useTypewriter(
+    "Memakmurkan masjid, mempererat ukhuwah islamiyah. Bersama kita bangun rumah Allah yang bermartabat.",
+    30,
+    1800,
+  );
 
   const hariString = jam.toLocaleDateString("id-ID", {
     weekday: "long",
@@ -272,47 +350,63 @@ function Home() {
 
       {/* ── HERO ── */}
       <section
-        className="relative min-h-screen flex items-center justify-center overflow-hidden"
-        style={{ backgroundColor: "var(--masjid-green)" }}
+        className="relative min-h-screen flex items-center justify-center"
+        style={{
+          background: `linear-gradient(to bottom, var(--masjid-green) 0%, var(--masjid-green) 40%, rgba(22,58,36,0.85) 70%, var(--masjid-green) 100%)`,
+        }}
       >
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: arabesque,
-            backgroundSize: "80px 80px",
-            transform: `translateY(${scrollOffset * 0.3}px)`,
-            willChange: "transform",
-          }}
-        />
+        {/* Silhouette Masjid */}
+        <div className="absolute inset-0 pointer-events-none">
+          <img
+            src="/images/masjid-silhouette.png"
+            className="w-full h-full object-cover object-bottom"
+            style={{ opacity: 0.3 }}
+          />
+          {/* Overlay hijau transparan di atas gambar */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(to bottom, rgba(22,58,36,0.7) 0%, rgba(22,58,36,0.3) 50%, rgba(22,58,36,0.6) 100%)",
+            }}
+          />
+        </div>
+
         <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/50" />
 
         <div className="relative text-center text-white px-6 max-w-4xl mx-auto w-full">
+          {/* Typewriter — Selamat Datang di */}
           <p
-            className="text-xs font-semibold tracking-[0.3em] uppercase mb-5"
+            className="text-xs font-semibold tracking-[0.3em] uppercase mb-4 h-4"
             style={{ color: "var(--masjid-gold)" }}
           >
-            Selamat Datang di
+            {twSambutan}
+            {!twSambutanDone && (
+              <span
+                className="cursor-blink border-r-2 ml-0.5 inline-block h-3 align-middle"
+                style={{ borderColor: "var(--masjid-gold)" }}
+              />
+            )}
           </p>
 
-          <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold mb-5 leading-tight">
-            Masjid
-            <br />
-            <span style={{ color: "var(--masjid-gold)" }}>Al-Muwahhidin</span>
+          {/* Shine effect — Masjid Al-Muwahhidin */}
+          <h1
+            className="text-4xl sm:text-6xl md:text-7xl font-bold mb-5"
+            style={{ lineHeight: "1.10", isolation: "isolate" }}
+          >
+            <span className="text-white block">Masjid</span>
+            <span className="shine-effect block">Al-Muwahhidin</span>
           </h1>
 
-          {/* Divider */}
-          <div
-            className="w-12 h-px mx-auto mb-6"
-            style={{ backgroundColor: "rgba(201,168,76,0.4)" }}
-          />
-
-          {/* Jam Realtime */}
+          {/* Count Up Jam */}
           <div
             className="mb-8 border rounded-2xl px-6 sm:px-10 py-4 inline-block"
             style={{
-              borderColor: "rgba(201,168,76,0.3)",
+              borderColor: "rgba(201,137,106,0.5)",
               backgroundColor: "rgba(0,0,0,0.25)",
               backdropFilter: "blur(8px)",
+              boxShadow:
+                "0 0 30px rgba(201,137,106,0.15), inset 0 0 30px rgba(201,137,106,0.05)",
             }}
           >
             <div className="flex items-end justify-center gap-1">
@@ -321,19 +415,19 @@ function Home() {
                 style={{
                   color: "var(--masjid-gold)",
                   textShadow:
-                    "0 0 30px rgba(201,168,76,0.5), 0 0 60px rgba(201,168,76,0.2)",
+                    "0 0 20px rgba(201,137,106,0.9), 0 0 50px rgba(201,137,106,0.6), 0 0 100px rgba(201,137,106,0.3)",
                 }}
               >
-                {jamString.slice(0, 5)}
+                {jamDisplay}
               </p>
               <p
                 className="font-mono font-light tracking-widest text-xl sm:text-2xl mb-1"
                 style={{
-                  color: "rgba(201,168,76,0.6)",
-                  textShadow: "0 0 20px rgba(201,168,76,0.3)",
+                  color: "rgba(201,137,106,0.6)",
+                  textShadow: "0 0 20px rgba(201,137,106,0.3)",
                 }}
               >
-                :{jamString.slice(6, 8)}
+                :{displaySec}
               </p>
             </div>
             <p className="text-white/40 text-xs mt-2 tracking-widest uppercase">
@@ -341,19 +435,25 @@ function Home() {
             </p>
           </div>
 
-          <p className="text-white/75 text-base sm:text-lg max-w-xl mx-auto mb-10 leading-relaxed px-2">
-            Memakmurkan masjid, mempererat ukhuwah islamiyah. Bersama kita
-            bangun rumah Allah yang bermartabat.
+          {/* Typewriter — Deskripsi */}
+          <p className="text-white/75 text-base sm:text-lg max-w-xl mx-auto mb-10 leading-relaxed px-2 min-h-[4rem]">
+            {twDeskripsi}
+            <span
+              className="cursor-blink border-r-2 ml-0.5 inline-block h-4 align-middle"
+              style={{ borderColor: "rgba(255,255,255,0.5)" }}
+            />
           </p>
 
-          {/* CTA Buttons — min h-12 untuk mobile */}
+          {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-3 justify-center px-4 sm:px-0">
             <Link
               to="/donasi"
-              className="h-12 flex items-center justify-center font-bold px-8 rounded-full transition-all duration-300 ease-in-out hover:scale-105 shadow-lg"
+              className="h-12 flex items-center justify-center font-bold px-8 rounded-full transition-all duration-300 ease-in-out hover:scale-105"
               style={{
                 backgroundColor: "var(--masjid-gold)",
                 color: "var(--masjid-green)",
+                boxShadow:
+                  "0 0 20px rgba(201,137,106,0.5), 0 0 40px rgba(201,137,106,0.2)",
               }}
             >
               Donasi Sekarang
@@ -368,10 +468,15 @@ function Home() {
           </div>
         </div>
 
-        {/* Scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/30 text-xs flex flex-col items-center gap-2">
-          <span className="tracking-widest uppercase text-[10px]">Scroll</span>
-          <div className="w-px h-8 bg-white/20" />
+        <div className="absolute bottom-0 left-0 right-0 pointer-events-none">
+          <svg
+            viewBox="0 0 1440 80"
+            preserveAspectRatio="none"
+            className="relative block w-full h-25 md:h-35"
+            style={{ fill: "var(--masjid-cream)" }}
+          >
+            <path d="M0,80 L1440,80 L1440,80 C1080,20 360,20 0,80 Z"></path>
+          </svg>
         </div>
       </section>
 

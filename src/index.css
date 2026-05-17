@@ -6,9 +6,9 @@
   --masjid-green-light: #2e6640;
   --masjid-cream: #f4edd8;
   --masjid-cream-dark: #ddd3be;
-  --masjid-gold: #c9896a;
-  --masjid-gold-1: #c9896a;
-  --masjid-gold-dim: #9e6a50;
+  --masjid-gold: #c9b16a;
+  --masjid-gold-1: #c9b16a;
+  --masjid-gold-dim: #9e9850;
 }
 
 body {
@@ -16,6 +16,48 @@ body {
   transition: background-color 0.3s ease;
 }
 
+/* ── Typewriter cursor blink ── */
+@keyframes cursorBlink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+.cursor-blink {
+  animation: cursorBlink 0.8s step-end infinite;
+}
+
+/* ── Text Shine / Ambient Glow ── */
+@keyframes shine {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+.shine-effect {
+  background: linear-gradient(
+    90deg,
+    #c9896a 0%,
+    #f5c9a8 25%,
+    #fff3e0 50%,
+    #f5c9a8 75%,
+    #c9896a 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shine 3s linear infinite;
+  display: inline-block;
+  padding-bottom: 12px;
+  line-height: 1.2;
+  overflow: visible !important;
+}
 /* ── Animated Gold Border ── */
 @keyframes borderRotate {
   0% {
